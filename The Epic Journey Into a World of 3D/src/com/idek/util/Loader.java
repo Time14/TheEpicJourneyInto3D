@@ -55,7 +55,7 @@ public final class Loader {
 					Vector3f scale = new Vector3f(1, 1, 1);
 					Vector3f offset = new Vector3f();
 					
-					if()
+					
 					
 					switch(data[0]) {
 					case "v":
