@@ -6,7 +6,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class Transform {
 	
-	public static final float DEFAULT_FOV = -80;
+	public static final float DEFAULT_FOV = 90;
 	public static final float DEFAULT_ZNEAR = 0.0001f;
 	public static final float DEFAULT_ZFAR = 100;
 	
@@ -255,7 +255,7 @@ public class Transform {
 	public static final Matrix4f getPerspectiveMatrix() {
 		Matrix4f matrix = new Matrix4f();
 		
-		float tanHalfFOV = (float)Math.tan(fov/2);
+		float tanHalfFOV = Math.abs((float)Math.tan(Math.toRadians(fov/2)));
 		float zRange = zNear - zFar;
 		float ar = ((float)Display.getWidth()) / Display.getHeight();
 		
