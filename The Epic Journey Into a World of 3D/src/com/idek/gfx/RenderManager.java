@@ -74,7 +74,7 @@ public class RenderManager {
 	}
 	
 	public void createEntities() {
-		addEntity("Monkey Head", new Entity(Loader.loadOBJMesh("res/obj/monkeyHead.obj")));
+		addEntity("Monkey Head", new Entity(Loader.loadOBJMesh("res/obj/Woola.obj")));
 	}
 	
 	public void setBGColor(float r, float g, float b) {

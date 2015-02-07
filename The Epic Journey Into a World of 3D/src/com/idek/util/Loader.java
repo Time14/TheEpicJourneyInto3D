@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import org.lwjgl.util.vector.Vector3f;
+
 import com.idek.gfx.Mesh;
 import com.idek.gfx.Vertex;
 
@@ -50,12 +52,30 @@ public final class Loader {
 				while(s.hasNextLine()) {
 					String[] data = s.nextLine().split(" ");
 					
-					if(data[0].equalsIgnoreCase("v")) {
-						verts.add(new Vertex(Float.parseFloat(data[1]), Float.parseFloat(data[2]), Float.parseFloat(data[3])));
-					} else if(data[0].equalsIgnoreCase("f")) {
+					Vector3f scale = new Vector3f(1, 1, 1);
+					Vector3f offset = new Vector3f();
+					
+					if()
+					
+					switch(data[0]) {
+					case "v":
+						verts.add(new Vertex(Float.parseFloat(data[1])*scale.x+offset.x, Float.parseFloat(data[2])*scale.y+offset.y, Float.parseFloat(data[3])*scale.z+offset.z));
+						break;
+					case "f":
 						for(int i = 1; i < data.length; i++) {
 							ints.add(Integer.parseInt(data[i]) - 1);
 						}
+						break;
+					case "#Auto":
+						switch(data[1]) {
+						case "scale":
+							scale = new Vector3f(Float.parseFloat(data[2].substring(2)), Float.parseFloat(data[3].substring(2)), Float.parseFloat(data[4].substring(2)));
+							break;
+						case "offset":
+							offset = new Vector3f(Float.parseFloat(data[2].substring(2)), Float.parseFloat(data[3].substring(2)), Float.parseFloat(data[4].substring(2)));
+							break;
+						}
+						break;
 					}
 				}
 				
