@@ -14,7 +14,7 @@ public class Core {
 	
 	public static final int DEFAULT_WIDTH = 800;
 	public static final int DEFAULT_HEIGHT = 600;
-	public static final String DEFAULT_TITLE = "Independent Developing Economic Kompany";
+	public static final String DEFAULT_TITLE = "Independent Developing Economic Kompany (TEJIAWO3D)";
 	
 	public static boolean running = true;
 	
