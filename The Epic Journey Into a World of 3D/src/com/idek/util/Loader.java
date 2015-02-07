@@ -1,12 +1,17 @@
 package com.idek.util;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import javax.imageio.ImageIO;
 
 import org.lwjgl.util.vector.Vector3f;
 
 import com.idek.gfx.Mesh;
+import com.idek.gfx.Texture;
 import com.idek.gfx.Vertex;
 
 public final class Loader {
@@ -102,6 +107,10 @@ public final class Loader {
 		}
 		
 		return null;
+	}
+	
+	public static final BufferedImage loadImage(String path) throws IOException {
+		return ImageIO.read(new File(path));
 	}
 	
 }

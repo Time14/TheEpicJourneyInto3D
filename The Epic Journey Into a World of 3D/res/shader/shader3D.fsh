@@ -8,7 +8,9 @@ in vec3 pass_color;
 
 void main() {
 
-	float lerp = pass_color.z;
+	//float lerp = pass_color.z;
 
-	color = mix(vec4(1, 0, 0, 1), vec4(0, 1, 0, 1), lerp / 1);
+	//color = mix(vec4(1, 0, 0, 1), vec4(0, 1, 0, 1), lerp *0.5);
+
+	color = vec4(pass_color, 1);
 }
