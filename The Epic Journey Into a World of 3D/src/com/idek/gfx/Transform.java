@@ -255,7 +255,7 @@ public class Transform {
 	public static final Matrix4f getPerspectiveMatrix() {
 		Matrix4f matrix = new Matrix4f();
 		
-		float tanHalfFOV = (float)Math.tan(fov/2);
+		float tanHalfFOV = Math.abs((float)Math.tan(Math.toRadians(fov/2)));
 		float zRange = zNear - zFar;
 		float ar = ((float)Display.getWidth()) / Display.getHeight();
 		
