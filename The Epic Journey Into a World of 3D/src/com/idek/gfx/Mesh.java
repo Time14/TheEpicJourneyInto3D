@@ -17,6 +17,8 @@ public class Mesh {
 	private int vbo = -2;
 	private int ibo = -2;
 	
+	private int mode = GL_TRIANGLES;
+	
 	private Vertex[] vertices;
 	private int[] indices;
 	
@@ -73,11 +75,16 @@ public class Mesh {
 		glBindVertexArray(vao);
 		
 		if(indices == null) {
-			glDrawArrays(GL_TRIANGLES, 0, vertices.length);
+			glDrawArrays(mode, 0, vertices.length);
 		} else {
 			
-			glDrawElements(GL_LINES, indices.length, GL_UNSIGNED_INT, 0);
+			glDrawElements(mode, indices.length, GL_UNSIGNED_INT, 0);
 		}
+	}
+	
+	public Mesh setMode(int mode) {
+		this.mode = mode;
+		return this;
 	}
 	
 	public void cleanUp() {

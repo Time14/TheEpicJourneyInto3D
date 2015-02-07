@@ -5,9 +5,13 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL21.*;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL31.*;
+import static org.lwjgl.opengl.GL32.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
@@ -21,10 +25,11 @@ public class RenderManager {
 	
 	private Vector4f bg = new Vector4f(0, 0, 0, 1);
 	
-	private ArrayList<Entity> entities;
+	private HashMap<String, Entity> entities;
 	
 	public RenderManager(Core core) {
 		this.core = core;
+		entities = new HashMap<>();
 		
 		initGL();
 		
@@ -32,9 +37,12 @@ public class RenderManager {
 	}
 	
 	public void update() {
-		for(Entity e : entities) {
+		for(Entity e : entities.values()) {
 			e.update();
 		}
+		
+		getEntity("Monkey Head").rotateY(1);
+		
 	}
 	
 	public void draw() {
@@ -42,7 +50,7 @@ public class RenderManager {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		ShaderProgram.SHADER_3D.bind();
-		for(Entity e : entities) {
+		for(Entity e : entities.values()) {
 			e.draw();
 		}
 	}
@@ -52,6 +60,13 @@ public class RenderManager {
 			System.out.println("OpenGL v." + glGetString(GL_VERSION));
 			
 			glEnable(GL_DEPTH_TEST);
+			glDepthMask(true);
+			
+			glEnable(GL_DEPTH_CLAMP);
+			
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
+			glFrontFace(GL_CW);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -59,10 +74,7 @@ public class RenderManager {
 	}
 	
 	public void createEntities() {
-		entities = new ArrayList<>();
-		
-		entities.add(new Entity().sendMesh(Loader.loadOBJMesh("res/obj/monkeyHead.obj")).sendTransform(new Transform().translate(new Vector3f(0, 0, 100f))));
-		entities.get(0).getTransform().scale = new Vector3f(10, 10, -10);
+		addEntity("Monkey Head", new Entity(Loader.loadOBJMesh("res/obj/monkeyHead.obj")));
 	}
 	
 	public void setBGColor(float r, float g, float b) {
@@ -77,12 +89,36 @@ public class RenderManager {
 		bg = color;
 	}
 	
-	public Entity getEntity(int index) {
-		return entities.get(index);
+	public void setFullsreen(boolean b) {
+		try {
+			if(b) {
+				Display.setDisplayMode(Display.getDesktopDisplayMode());
+				Display.setFullscreen(b);
+				adjustViewportToDisplay();
+			} else {
+				Display.setDisplayMode(new DisplayMode(Core.DEFAULT_WIDTH, Core.DEFAULT_HEIGHT));
+				Display.setFullscreen(b);
+				adjustViewportToDisplay();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void adjustViewportToDisplay() {
+		glViewport(0, 0, Display.getWidth(), Display.getHeight());
+	}
+	
+	public void addEntity(String key, Entity e) {
+		entities.put(key, e);
+	}
+	
+	public Entity getEntity(String key) {
+		return entities.get(key);
 	}
 	
 	public void cleanUp() {
-		for(Entity e : entities) {
+		for(Entity e : entities.values()) {
 			e.cleanUp();
 		}
 	}

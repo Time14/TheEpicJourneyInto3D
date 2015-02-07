@@ -12,6 +12,8 @@ import com.idek.input.InputManager;
 
 public class Core {
 	
+	public static final int DEFAULT_WIDTH = 800;
+	public static final int DEFAULT_HEIGHT = 600;
 	public static final String DEFAULT_TITLE = "Independent Developing Economic Kompany";
 	
 	public static boolean running = true;
@@ -36,10 +38,8 @@ public class Core {
 		try {
 		
 			Display.setTitle(DEFAULT_TITLE);
-			Display.setDisplayMode(new DisplayMode(800, 600));
-//			Display.setDisplayMode(Display.getDesktopDisplayMode());
-//			Display.setFullscreen(true);
-//			Display.setVSyncEnabled(true);
+			Display.setDisplayMode(new DisplayMode(Core.DEFAULT_WIDTH, Core.DEFAULT_HEIGHT));
+			Display.setVSyncEnabled(true);
 			Display.create();
 			
 		} catch (Exception e) {

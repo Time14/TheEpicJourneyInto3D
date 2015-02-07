@@ -2,8 +2,10 @@ package com.idek.input;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.idek.gfx.entity.Entity;
 import com.idek.main.Core;
 
 import static org.lwjgl.input.Keyboard.*;
@@ -46,10 +48,16 @@ public class InputManager {
 	private void checkKeyboard() {
 		float speed = 0.1f;
 		
+		Entity monkey = core.getRenderManager().getEntity("Monkey Head");
+		
 		if(isKeyDown(KEY_UP))
-			core.getRenderManager().getEntity(0).getTransform().translate(new Vector3f(0, 0, speed));
+			monkey.translateZ(-speed);
 		if(isKeyDown(KEY_DOWN))
-			core.getRenderManager().getEntity(0).getTransform().translate(new Vector3f(0, 0, -speed));
+			monkey.translateZ(speed);
+		if(isKeyDown(KEY_Q))
+			monkey.addScale(speed);
+		if(isKeyDown(KEY_E))
+			monkey.addScale(-speed);
 		
 		while(Keyboard.next()) {
 			if(Keyboard.getEventKeyState()) {
@@ -58,6 +66,9 @@ public class InputManager {
 				switch(Keyboard.getEventKey()) {
 				case KEY_ESCAPE:
 					Core.exit();
+					break;
+				case KEY_F11:
+					core.getRenderManager().setFullsreen(!Display.isFullscreen());
 					break;
 				}
 			} else {
