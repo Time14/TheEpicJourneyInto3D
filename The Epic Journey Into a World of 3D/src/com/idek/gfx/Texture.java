@@ -1,6 +1,8 @@
 package com.idek.gfx;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.*;
+import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL21.*;
@@ -8,9 +10,11 @@ import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL31.*;
 import static org.lwjgl.opengl.GL32.*;
 
-
 import java.awt.image.BufferedImage;
+import java.security.InvalidParameterException;
+
 import com.idek.util.Loader;
+import com.idek.util.Util;
 
 public class Texture {
 	
@@ -52,10 +56,25 @@ public class Texture {
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 			}
 			
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, Util.toIntBuffer(pixels));
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		return this;
 	}
+	
+	public Texture bind(int target) {
+		
+		if(target > 31 || target < 0) {
+			throw new InvalidParameterException("Target must be in range 0 - 31");
+		}
+		
+		glActiveTexture(GL_TEXTURE0 + target);
+		glBindTexture(GL_TEXTURE_2D, id);
+		return this;
+	}
+	
+	public static final Texture DEFAULT_TEXTURE = new Texture("res/texture/UV_mapper.png");
 }

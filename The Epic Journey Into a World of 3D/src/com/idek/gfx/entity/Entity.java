@@ -3,15 +3,18 @@ package com.idek.gfx.entity;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.idek.gfx.Mesh;
-import com.idek.gfx.ShaderProgram;
 import com.idek.gfx.Transform;
 import com.idek.gfx.Vertex;
+import com.idek.gfx.shader.ShaderProgram;
+import com.idek.gfx.shader.ShaderProgram3D;
 
 public class Entity {
 	
 	private Mesh mesh;
 	
 	private Transform transform;
+	
+	private ShaderProgram3D program = ShaderProgram3D.INSTANCE;
 	
 	public Entity() {
 		transform = new Transform();
@@ -56,7 +59,8 @@ public class Entity {
 	}
 	
 	public void draw() {
-		ShaderProgram.SHADER_3D.sendMatrix(transform.getMatrix(true));
+		program.bind();
+		program.sendMatrix(transform.getMatrix(true));
 		mesh.draw();
 	}
 	

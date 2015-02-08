@@ -5,6 +5,8 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
+import org.lwjgl.util.vector.Matrix4f;
+
 import com.idek.gfx.Vertex;
 
 public final class Util {
@@ -21,6 +23,13 @@ public final class Util {
 		for(Vertex v : data) {
 			buffer.put(v.getData());
 		}
+		buffer.flip();
+		return buffer;
+	}
+	
+	public static final FloatBuffer toFloatBuffer(Matrix4f matrix) {
+		FloatBuffer buffer = createFloatBuffer(16);
+		matrix.store(buffer);
 		buffer.flip();
 		return buffer;
 	}

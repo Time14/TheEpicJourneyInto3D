@@ -1,6 +1,7 @@
 package com.idek.gfx;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL21.*;
 import static org.lwjgl.opengl.GL30.*;
@@ -16,6 +17,8 @@ import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 import com.idek.gfx.entity.Entity;
+import com.idek.gfx.shader.ShaderProgram;
+import com.idek.gfx.shader.ShaderProgram3D;
 import com.idek.main.Core;
 import com.idek.util.Loader;
 
@@ -42,14 +45,14 @@ public class RenderManager {
 		}
 		
 		getEntity("Monkey Head").rotateY(1);
-		
+		getEntity("Cup").rotateY(1);
 	}
 	
 	public void draw() {
 		glClearColor(bg.x, bg.y, bg.z, bg.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		ShaderProgram.SHADER_3D.bind();
+		ShaderProgram3D.INSTANCE.bind();
 		for(Entity e : entities.values()) {
 			e.draw();
 		}
@@ -58,6 +61,9 @@ public class RenderManager {
 	private void initGL() {
 		try {
 			System.out.println("OpenGL v." + glGetString(GL_VERSION));
+			
+//			glEnable(GL_MULTISAMPLE);
+//			glEnable(GL_LINE_SMOOTH);
 			
 			glEnable(GL_DEPTH_TEST);
 			glDepthMask(true);
@@ -77,6 +83,8 @@ public class RenderManager {
 		addEntity("Monkey Head", new Entity(Loader.loadOBJMesh("res/obj/monkeyHead.obj")));
 		addEntity("Woola", new Entity(Loader.loadOBJMesh("res/obj/Woola.obj")));
 		getEntity("Woola").translateZ(20).translateX(20);
+		addEntity("Cup", new Entity(Loader.loadOBJMesh("res/obj/cup.obj")));
+		getEntity("Cup").translate(-10, 0, 10);
 	}
 	
 	public void setBGColor(float r, float g, float b) {
@@ -123,5 +131,7 @@ public class RenderManager {
 		for(Entity e : entities.values()) {
 			e.cleanUp();
 		}
+		
+		ShaderProgram3D.INSTANCE.cleanUp();
 	}
 }

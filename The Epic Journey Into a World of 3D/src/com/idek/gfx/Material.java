@@ -2,7 +2,7 @@ package com.idek.gfx;
 
 public class Material {
 	
-	private Texture texture;
+	private Texture texture = Texture.DEFAULT_TEXTURE;
 	
 	public Material() {}
 	
@@ -12,4 +12,9 @@ public class Material {
 		return this;
 	}
 	
+	public Material bind() {
+		texture.bind(0);
+		
+		return this;
+	}
 }
