@@ -4,18 +4,16 @@
 uniform mat4 matrix;
 uniform sampler2D texture;
 
-in vec3 pass_position;
 in vec2 pass_texCoord;
 in vec3 pass_normal;
+in vec3 pass_toLight;
 
 out vec4 out_color;
 void main() {
 
-	vec4 light = vec4(-5, 0, -5, 1);
+	float strength = 5;
 
-	vec4 normalToLight = light - (matrix * vec4(pass_position, 1));
+	vec3 diffuse = dot(normalize(pass_toLight), pass_normal) * vec3(0, 0.5, 0.5) * (strength - length(pass_toLight)/5);
 
-	out_color = texture2D(texture, pass_texCoord);
-
-	out_color = out_color * dot(normalize(matrix * vec4(pass_normal, 1)), normalize(vec4(normalToLight, 1));
+	out_color = vec4(diffuse, 1) * texture2D(texture, pass_texCoord);
 }
