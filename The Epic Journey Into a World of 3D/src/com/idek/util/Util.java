@@ -7,7 +7,7 @@ import java.nio.IntBuffer;
 
 import org.lwjgl.util.vector.Matrix4f;
 
-import com.idek.gfx.Vertex;
+import com.idek.gfx.vertex.Vertex3D;
 
 public final class Util {
 	
@@ -18,9 +18,9 @@ public final class Util {
 		return buffer;
 	}
 	
-	public static final FloatBuffer toFloatBuffer(Vertex[] data) {
-		FloatBuffer buffer = createFloatBuffer(data.length * Vertex.LENGTH);
-		for(Vertex v : data) {
+	public static final FloatBuffer toFloatBuffer(Vertex3D[] data) {
+		FloatBuffer buffer = createFloatBuffer(data.length * Vertex3D.LENGTH);
+		for(Vertex3D v : data) {
 			buffer.put(v.getData());
 		}
 		buffer.flip();

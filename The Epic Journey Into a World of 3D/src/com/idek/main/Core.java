@@ -22,6 +22,7 @@ public class Core {
 	private RenderManager rm;
 	
 	public Core() {
+				
 		initDisplay();
 		
 		im = new InputManager(this);

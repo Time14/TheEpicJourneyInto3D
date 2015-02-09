@@ -14,7 +14,6 @@ public class Material {
 	
 	public Material bind() {
 		texture.bind(0);
-		
 		return this;
 	}
 }

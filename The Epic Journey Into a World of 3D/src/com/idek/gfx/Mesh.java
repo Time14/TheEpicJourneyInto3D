@@ -9,6 +9,9 @@ import static org.lwjgl.opengl.GL31.*;
 
 import java.nio.FloatBuffer;
 
+import com.idek.gfx.shader.ShaderProgram;
+import com.idek.gfx.shader.ShaderProgram3D;
+import com.idek.gfx.vertex.Vertex3D;
 import com.idek.util.Util;
 
 public class Mesh {
@@ -19,20 +22,22 @@ public class Mesh {
 	
 	private int mode = GL_TRIANGLES;
 	
-	private Vertex[] vertices;
+	private Vertex3D[] vertices;
 	private int[] indices;
+	
+	private ShaderProgram program = ShaderProgram3D.INSTANCE;
 	
 	public Mesh() {}
 	
-	public Mesh(Vertex[] vertices) {
+	public Mesh(Vertex3D[] vertices) {
 		createVAO(vertices);
 	}
 	
-	public Mesh(Vertex[] vertices, int[] indices) {
+	public Mesh(Vertex3D[] vertices, int[] indices) {
 		createVAO(vertices, indices);
 	}
 	
-	public void createVAO(Vertex[] vertices) {
+	public void createVAO(Vertex3D[] vertices) {
 		this.vertices = vertices;
 		
 		vao = glGenVertexArrays();
@@ -42,13 +47,10 @@ public class Mesh {
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glBufferData(GL_ARRAY_BUFFER, Util.toFloatBuffer(vertices), GL_STATIC_DRAW);
 		
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 6 * Float.SIZE/8, 0);
-		glVertexAttribPointer(1, 3, GL_FLOAT, true, 6 * Float.SIZE/8, 3 * Float.SIZE/8);
+		program.initAttributes();
 	}
 	
-	public void createVAO(Vertex[] vertices, int[] indices) {
+	public void createVAO(Vertex3D[] vertices, int[] indices) {
 		this.vertices = vertices;
 		this.indices = indices;
 		
@@ -65,10 +67,7 @@ public class Mesh {
 		
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, Util.toIntBuffer(indices), GL_STATIC_DRAW);
 		
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 6 * Float.SIZE/8, 0);
-		glVertexAttribPointer(1, 3, GL_FLOAT, true, 6 * Float.SIZE/8, 3 * Float.SIZE/8);
+		program.initAttributes();
 	}
 	
 	public void draw() {

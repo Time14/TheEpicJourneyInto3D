@@ -45,7 +45,6 @@ public class RenderManager {
 		}
 		
 		getEntity("Monkey Head").rotateY(1);
-		getEntity("Cup").rotateY(1);
 	}
 	
 	public void draw() {
@@ -80,11 +79,7 @@ public class RenderManager {
 	}
 	
 	public void createEntities() {
-		addEntity("Monkey Head", new Entity(Loader.loadOBJMesh("res/obj/monkeyHead.obj")));
-		addEntity("Woola", new Entity(Loader.loadOBJMesh("res/obj/Woola.obj")));
-		getEntity("Woola").translateZ(20).translateX(20);
-		addEntity("Cup", new Entity(Loader.loadOBJMesh("res/obj/cup.obj")));
-		getEntity("Cup").translate(-10, 0, 10);
+		addEntity("Monkey Head", new Entity(Loader.loadOBJMesh("res/obj/icoSphere/icoSphereMatTest.obj")));
 	}
 	
 	public void setBGColor(float r, float g, float b) {

@@ -2,15 +2,18 @@ package com.idek.gfx.entity;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import com.idek.gfx.Material;
 import com.idek.gfx.Mesh;
 import com.idek.gfx.Transform;
-import com.idek.gfx.Vertex;
 import com.idek.gfx.shader.ShaderProgram;
 import com.idek.gfx.shader.ShaderProgram3D;
+import com.idek.gfx.vertex.Vertex3D;
 
 public class Entity {
 	
 	private Mesh mesh;
+	
+	private Material material;
 	
 	private Transform transform;
 	
@@ -25,8 +28,13 @@ public class Entity {
 	}
 
 	public Entity(Mesh mesh, Transform transform) {
+		this(mesh, transform, new Material());
+	}
+	
+	public Entity(Mesh mesh, Transform transform, Material material) {
 		this.mesh = mesh;
 		this.transform = transform;
+		this.material = material;
 	}
 	
 	public Entity sendMesh(Mesh mesh) {
@@ -41,13 +49,13 @@ public class Entity {
 		return this;
 	}
 	
-	public Entity initMesh(Vertex... vertices) {
+	public Entity initMesh(Vertex3D... vertices) {
 		
 		this.mesh = new Mesh(vertices);
 		return this;
 	}
 	
-	public Entity initMesh(Vertex[] vertices, int[] indices) {
+	public Entity initMesh(Vertex3D[] vertices, int[] indices) {
 		
 		this.mesh = new Mesh(vertices, indices);
 		return this;
@@ -61,6 +69,7 @@ public class Entity {
 	public void draw() {
 		program.bind();
 		program.sendMatrix(transform.getMatrix(true));
+		material.bind();
 		mesh.draw();
 	}
 	
