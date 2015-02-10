@@ -6,6 +6,7 @@ import static org.lwjgl.opengl.GL11.glGetString;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
+import com.idek.gfx.Camera;
 import com.idek.gfx.RenderManager;
 import com.idek.input.InputManager;
 

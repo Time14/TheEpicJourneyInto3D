@@ -36,7 +36,7 @@ public class Transform {
 		this.scale = scale;
 	}
 	
-	public Matrix4f getMatrix(boolean project3D) {
+	public Matrix4f getMatrix() {
 		Matrix4f matrix = new Matrix4f();
 		matrix.setIdentity();
 		
@@ -46,11 +46,7 @@ public class Transform {
 		matrix.rotate((float)Math.toRadians(rotation.z), new Vector3f(0, 0, 1));
 		matrix.scale(scale);
 		
-		if(project3D) {
-			return Matrix4f.mul(getPerspectiveMatrix(), matrix, matrix);
-		} else {
-			return matrix;
-		}
+		return matrix;
 	}
 	
 	public Transform setRX(float rx) {
@@ -252,7 +248,7 @@ public class Transform {
 		return this;
 	}
 	
-	public static final Matrix4f getPerspectiveMatrix() {
+	public static final Matrix4f getProjectionMatrix() {
 		Matrix4f matrix = new Matrix4f();
 		
 		float tanHalfFOV = Math.abs((float)Math.tan(Math.toRadians(fov/2)));

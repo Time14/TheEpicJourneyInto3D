@@ -36,31 +36,39 @@ public class Texture {
 		try {
 			BufferedImage image = Loader.loadImage(path);
 			
-			width = image.getWidth();
-			height = image.getHeight();
+			int width = image.getWidth();
+			int height = image.getHeight();
 			
 			int[] pixels = new int[width * height];
 			image.getRGB(0, 0, width, height, pixels, 0, width);
-			
-			id = glGenTextures();
-			
-			glBindTexture(GL_TEXTURE_2D, id);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			
-			if(repeat) {
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			} else {
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-			}
-			
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, Util.toIntBuffer(pixels));
-			
+		
+			loadTexture(pixels, repeat, width, height);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		return this;
+	}
+	
+	public Texture loadTexture(int[] pixels, boolean repeat, int width, int height) {
+		this.width = width;
+		this.height = height;
+		
+		id = glGenTextures();
+		
+		glBindTexture(GL_TEXTURE_2D, id);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		
+		if(repeat) {
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		} else {
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		}
+		
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, Util.toIntBuffer(pixels));
 		
 		return this;
 	}
@@ -77,4 +85,5 @@ public class Texture {
 	}
 	
 	public static final Texture DEFAULT_TEXTURE = new Texture("res/texture/UV_mapper.png");
+	public static final Texture DEFAULT_NORMAL_MAP = new Texture().loadTexture(new int[]{0x00888800}, false, 1, 1);
 }

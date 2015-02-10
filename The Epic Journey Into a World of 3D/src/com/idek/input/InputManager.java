@@ -5,6 +5,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.idek.gfx.Camera;
 import com.idek.gfx.entity.Entity;
 import com.idek.main.Core;
 
@@ -17,6 +18,8 @@ public class InputManager {
 	public static final int MOUSE_WHEEL_BUTTON = 2;
 	
 	private Core core;
+	
+	private Camera camera = Camera.INSTANCE;
 	
 	public InputManager(Core core) {
 		this.core = core;
@@ -48,16 +51,18 @@ public class InputManager {
 	private void checkKeyboard() {
 		float speed = 0.1f;
 		
-		Entity monkey = core.getRenderManager().getEntity("Monkey Head");
-		
-		if(isKeyDown(KEY_UP))
-			monkey.translateZ(-speed);
-		if(isKeyDown(KEY_DOWN))
-			monkey.translateZ(speed);
-		if(isKeyDown(KEY_Q))
-			monkey.addScale(speed);
-		if(isKeyDown(KEY_E))
-			monkey.addScale(-speed);
+		if(isKeyDown(KEY_W))
+			camera.translateZ(speed);
+		if(isKeyDown(KEY_A))
+			camera.translateX(-speed);
+		if(isKeyDown(KEY_S))
+			camera.translateZ(-speed);
+		if(isKeyDown(KEY_D))
+			camera.translateX(speed);
+		if(isKeyDown(KEY_LSHIFT))
+			camera.translateY(-speed);
+		if(isKeyDown(KEY_SPACE))
+			camera.translateY(speed);
 		
 		while(Keyboard.next()) {
 			if(Keyboard.getEventKeyState()) {

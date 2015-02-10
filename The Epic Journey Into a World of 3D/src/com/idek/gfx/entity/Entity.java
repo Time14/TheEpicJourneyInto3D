@@ -2,12 +2,14 @@ package com.idek.gfx.entity;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import com.idek.gfx.Camera;
 import com.idek.gfx.Material;
 import com.idek.gfx.Mesh;
 import com.idek.gfx.Transform;
 import com.idek.gfx.shader.ShaderProgram;
 import com.idek.gfx.shader.ShaderProgram3D;
 import com.idek.gfx.vertex.Vertex3D;
+import com.idek.main.Core;
 
 public class Entity {
 	
@@ -18,6 +20,8 @@ public class Entity {
 	private Transform transform;
 	
 	private ShaderProgram3D program = ShaderProgram3D.INSTANCE;
+	
+	private Camera camera = Camera.INSTANCE;
 	
 	public Entity() {
 		transform = new Transform();
@@ -68,7 +72,10 @@ public class Entity {
 	
 	public void draw() {
 		program.bind();
-		program.sendMatrix(transform.getMatrix(true));
+		program.sendTransformMatrix(transform.getMatrix());
+		program.sendProjectionMatrix(Transform.getProjectionMatrix());
+		if(!camera.isUpdated())
+			program.sendViewMatrix(camera.setUpdated(true).getViewMatrix());
 		material.bind();
 		mesh.draw();
 	}
