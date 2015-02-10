@@ -79,7 +79,7 @@ public class RenderManager {
 	}
 	
 	public void createEntities() {
-		addEntity("Monkey Head", new Entity(Loader.loadOBJMesh("res/obj/icoSphere/icoSphereMatTest.obj").setMode(GL_LINES)));
+		addEntity("Monkey Head", new Entity(Loader.loadOBJMesh("res/obj/icoSphere/icoSphereMatTest.obj")));
 		getEntity("Monkey Head").setPosition(0, 0, 3);
 	}
 	

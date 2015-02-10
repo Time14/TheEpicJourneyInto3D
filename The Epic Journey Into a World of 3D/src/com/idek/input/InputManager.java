@@ -31,6 +31,18 @@ public class InputManager {
 	}
 	
 	private void checkMouse() {
+				
+		camera.rotate(-Mouse.getDY(), Mouse.getDX(), 0);
+		
+		float rx = camera.getTransform().rotation.x;
+		
+		if(rx > 90 && rx < 270) {
+			if(rx < 270 - rx)
+				camera.setRX(90);
+			else
+				camera.setRX(270);
+		}
+		
 		while(Mouse.next()) {
 			if(Mouse.getEventButtonState()) {
 				//Button Pressed
@@ -74,6 +86,9 @@ public class InputManager {
 					break;
 				case KEY_F11:
 					core.getRenderManager().setFullsreen(!Display.isFullscreen());
+					break;
+				case KEY_LMENU:
+					Mouse.setGrabbed(!Mouse.isGrabbed());
 					break;
 				}
 			} else {

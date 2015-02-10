@@ -6,7 +6,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class Transform {
 	
-	public static final float DEFAULT_FOV = 90;
+	public static final float DEFAULT_FOV = 70;
 	public static final float DEFAULT_ZNEAR = 0.0001f;
 	public static final float DEFAULT_ZFAR = 100;
 	
@@ -51,16 +51,22 @@ public class Transform {
 	
 	public Transform setRX(float rx) {
 		rotation.x = rx % 360;
+		if(rotation.x < 0)
+			rotation.x += 360;
 		return this;
 	}
 	
 	public Transform setRY(float ry) {
 		rotation.y = ry % 360;
+		if(rotation.y < 0)
+			rotation.y += 360;
 		return this;
 	}
 	
 	public Transform setRZ(float rz) {
 		rotation.z = rz % 360;
+		if(rotation.z < 0)
+			rotation.z += 360;
 		return this;
 	}
 	
@@ -69,27 +75,32 @@ public class Transform {
 	}
 	
 	public Transform setRotation(Vector3f rotation) {
-		this.rotation.x = rotation.x % 360;
-		this.rotation.y = rotation.y % 360;
-		this.rotation.z = rotation.z % 360;
-		return this;
+		setRX(rotation.x);
+		setRY(rotation.y);
+		return setRZ(rotation.z);
 	}
 	
 	public Transform rotateX(float rotation) {
 		this.rotation.x += rotation;
 		this.rotation.x %= 360;
+		if(this.rotation.x < 0)
+			this.rotation.x += 360;
 		return this;
 	}
 	
 	public Transform rotateY(float rotation) {
 		this.rotation.y += rotation;
 		this.rotation.y %= 360;
+		if(this.rotation.y < 0)
+			this.rotation.y += 360;
 		return this;
 	}
 	
 	public Transform rotateZ(float rotation) {
 		this.rotation.z += rotation;
 		this.rotation.z %= 360;
+		if(this.rotation.z < 0)
+			this.rotation.z += 360;
 		return this;
 	}
 	
@@ -100,8 +111,14 @@ public class Transform {
 	public Transform rotate(Vector3f rotation) {
 		Vector3f.add(this.rotation, rotation, this.rotation);
 		this.rotation.x %= 360;
+		if(this.rotation.x < 0)
+			this.rotation.x += 360;
 		this.rotation.y %= 360;
+		if(this.rotation.y < 0)
+			this.rotation.y += 360;
 		this.rotation.z %= 360;
+		if(this.rotation.z < 0)
+			this.rotation.z += 360;
 		return this;
 	}
 	

@@ -18,6 +18,16 @@ public class Camera {
 		return transform;
 	}
 	
+	public Camera clampRY() {
+		
+		return this;
+	}
+	
+	public Camera clampRX() {
+		
+		return this;
+	}
+	
 	public Camera setRX(float rx) {
 		transform.setRX(rx);
 		isUpdated = false;
