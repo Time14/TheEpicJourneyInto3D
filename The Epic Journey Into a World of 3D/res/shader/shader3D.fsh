@@ -16,7 +16,9 @@ void main() {
 
 	vec3 lightColor = vec3(1, 1, 1);
 
-	vec3 diffuse = dot(normalize(pass_toLight), normalize(pass_normal)) * lightColor;
+	vec3 localNormal = pass_normal + (viewMatrix * texture2D(textures[1], pass_texCoord)).xyz;
+
+	vec3 diffuse = dot(normalize(pass_toLight), normalize(localNormal)) * lightColor;
 
 	out_color = vec4(diffuse, 1) * texture2D(textures[0], pass_texCoord);
 }

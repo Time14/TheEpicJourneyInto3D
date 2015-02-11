@@ -49,6 +49,7 @@ public class RenderManager {
 		getEntity("i0").rotateY(1);
 		getEntity("i1").rotateX(1);
 		getEntity("i2").rotateZ(1);
+		getEntity("i3").rotate(1, 1, 1);
 	
 		return this;
 	}
@@ -94,7 +95,9 @@ public class RenderManager {
 		addEntity("i1", new Entity(Loader.loadOBJMesh("res/obj/icoSphere/funkyTorus.obj")));
 		getEntity("i1").setPosition(-3, 0, 3);
 		addEntity("i2", new Entity(Loader.loadOBJMesh("res/obj/icoSphere/funkyTorus.obj")));
-		getEntity("i2").setPosition(1.5f, 0, -3);
+		getEntity("i2").setPosition(0, 0, -4);
+		addEntity("i3", new Entity(Loader.loadOBJMesh("res/obj/icoSphere/funkyTorus.obj")));
+		getEntity("i3").setPosition(0, 0, 0);
 		
 		return this;
 	}
