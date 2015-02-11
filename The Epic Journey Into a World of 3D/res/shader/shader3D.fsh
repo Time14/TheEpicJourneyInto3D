@@ -1,8 +1,10 @@
 
 #version 400
 
-uniform mat4 matrix;
+uniform mat4 projectionMatrix;
+uniform mat4 transformMatrix;
 uniform mat4 viewMatrix;
+
 uniform sampler2D[] textures;
 
 in vec2 pass_texCoord;
@@ -14,7 +16,7 @@ void main() {
 
 	vec3 lightColor = vec3(1, 1, 1);
 
-	vec3 diffuse = dot(normalize(pass_toLight), pass_normal) * lightColor;
+	vec3 diffuse = dot(normalize(pass_toLight), normalize(pass_normal)) * lightColor;
 
 	out_color = vec4(diffuse, 1) * texture2D(textures[0], pass_texCoord);
 }

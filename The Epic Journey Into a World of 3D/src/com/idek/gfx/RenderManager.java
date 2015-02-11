@@ -41,15 +41,19 @@ public class RenderManager {
 		createEntities();
 	}
 	
-	public void update() {
+	public RenderManager update() {
 		for(Entity e : entities.values()) {
 			e.update();
 		}
 		
-//		getEntity("Monkey Head").rotateY(1);
+		getEntity("i0").rotateY(1);
+		getEntity("i1").rotateX(1);
+		getEntity("i2").rotateZ(1);
+	
+		return this;
 	}
 	
-	public void draw() {
+	public RenderManager draw() {
 		glClearColor(bg.x, bg.y, bg.z, bg.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
@@ -57,9 +61,11 @@ public class RenderManager {
 		for(Entity e : entities.values()) {
 			e.draw();
 		}
+		
+		return this;
 	}
 	
-	private void initGL() {
+	private RenderManager initGL() {
 		try {
 			System.out.println("OpenGL v." + glGetString(GL_VERSION));
 			
@@ -78,15 +84,19 @@ public class RenderManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		return this;
 	}
 	
-	public void createEntities() {
-		addEntity("Monkey Head", new Entity(Loader.loadOBJMesh("res/obj/icoSphere/icoSphereMatTest.obj")));
-		getEntity("Monkey Head").setPosition(0, 0, 3);
-		addEntity("i1", new Entity(Loader.loadOBJMesh("res/obj/icoSphere/icoSphereMatTest.obj")));
-		getEntity("i1").setPosition(-3, 3, 3);
-		addEntity("i2", new Entity(Loader.loadOBJMesh("res/obj/icoSphere/icoSphereMatTest.obj")));
-		getEntity("i2").setPosition(3, 0, 3);
+	public RenderManager createEntities() {
+		addEntity("i0", new Entity(Loader.loadOBJMesh("res/obj/icoSphere/funkyTorus.obj")));
+		getEntity("i0").setPosition(3, 0, 3);
+		addEntity("i1", new Entity(Loader.loadOBJMesh("res/obj/icoSphere/funkyTorus.obj")));
+		getEntity("i1").setPosition(-3, 0, 3);
+		addEntity("i2", new Entity(Loader.loadOBJMesh("res/obj/icoSphere/funkyTorus.obj")));
+		getEntity("i2").setPosition(1.5f, 0, -3);
+		
+		return this;
 	}
 	
 	public RenderManager setBGColor(float r, float g, float b) {
@@ -104,7 +114,7 @@ public class RenderManager {
 		return this;
 	}
 	
-	public void setFullsreen(boolean b) {
+	public RenderManager setFullsreen(boolean b) {
 		try {
 			if(b) {
 				Display.setDisplayMode(Display.getDesktopDisplayMode());
@@ -118,25 +128,33 @@ public class RenderManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		return this;
 	}
 	
-	public void adjustViewportToDisplay() {
+	public RenderManager adjustViewportToDisplay() {
 		glViewport(0, 0, Display.getWidth(), Display.getHeight());
+	
+		return this;
 	}
 	
-	public void addEntity(String key, Entity e) {
+	public RenderManager addEntity(String key, Entity e) {
 		entities.put(key, e);
+	
+		return this;
 	}
 	
 	public Entity getEntity(String key) {
 		return entities.get(key);
 	}
 	
-	public void cleanUp() {
+	public RenderManager cleanUp() {
 		for(Entity e : entities.values()) {
 			e.cleanUp();
 		}
 		
 		ShaderProgram3D.INSTANCE.cleanUp();
+		
+		return this;
 	}
 }

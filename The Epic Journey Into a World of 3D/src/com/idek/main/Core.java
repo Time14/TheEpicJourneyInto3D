@@ -28,7 +28,7 @@ public class Core {
 		initDisplay();
 		
 		im = new InputManager(this);
-		rm = new RenderManager(this).setBGColor(1, 0, 0);
+		rm = new RenderManager(this).setBGColor(0, 0, 0);
 		
 		while(!Display.isCloseRequested() && running) {
 			gameLoop();

@@ -20,7 +20,7 @@ void main() {
 	vec4 worldPosition = viewMatrix * transformMatrix * vec4(in_position, 1);
 
 	pass_texCoord = in_texCoord;
-	pass_normal = normalize((transformMatrix * vec4(pass_normal, 1)).xyz);
+	pass_normal  = (viewMatrix * transformMatrix * vec4(in_normal, 0)).xyz;
 	pass_toLight = (viewMatrix * vec4(lightPos, 1)).xyz - worldPosition.xyz;
 
 	gl_Position = projectionMatrix * worldPosition;
