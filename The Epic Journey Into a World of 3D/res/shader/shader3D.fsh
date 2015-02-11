@@ -7,10 +7,16 @@ uniform sampler2D[] textures;
 
 in vec2 pass_texCoord;
 in vec3 pass_normal;
+in vec3 pass_toLight;
 
 out vec4 out_color;
 void main() {
-	out_color = texture2D(textures[0], pass_texCoord);
+
+	vec3 lightColor = vec3(1, 1, 1);
+
+	vec3 diffuse = dot(normalize(pass_toLight), pass_normal) * lightColor;
+
+	out_color = vec4(diffuse, 1) * texture2D(textures[0], pass_texCoord);
 }
 
 /*

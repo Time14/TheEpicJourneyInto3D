@@ -5,6 +5,8 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class Camera {
 	
+	public static final float SENSITIVITY = .5f;
+	
 	private Transform transform;
 	
 	private boolean isUpdated;
@@ -18,12 +20,22 @@ public class Camera {
 		return transform;
 	}
 	
-	public Camera clampRY() {
+	public Camera moveForward(float distance) {
+		
+		transform.translateZ((float)Math.cos(Math.toRadians(transform.rotation.y)) * distance);
+		transform.translateX((float)Math.sin(Math.toRadians(transform.rotation.y)) * distance);
+		
+		isUpdated = false;
 		
 		return this;
 	}
 	
-	public Camera clampRX() {
+	public Camera moveRight(float distance) {
+		
+		transform.translateX((float)Math.cos(Math.toRadians(transform.rotation.y)) * distance);
+		transform.translateZ((float)Math.sin(-Math.toRadians(transform.rotation.y)) * distance);
+		
+		isUpdated = false;
 		
 		return this;
 	}

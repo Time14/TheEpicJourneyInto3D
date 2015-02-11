@@ -10,15 +10,20 @@ layout(location = 2) in vec3 in_normal;
 
 out vec2 pass_texCoord;
 out vec3 pass_normal;
+out vec3 pass_toLight;
 
 void main() {
 
+	vec3 lightPos = vec3(0, 0, 0);
+	//vec3 lightPos = inverse(viewMatrix * vec4(0, 0, 0, 1)).xyz;
+
+	vec4 worldPosition = viewMatrix * transformMatrix * vec4(in_position, 1);
+
 	pass_texCoord = in_texCoord;
-	pass_normal = in_normal;
+	pass_normal = normalize((transformMatrix * vec4(pass_normal, 1)).xyz);
+	pass_toLight = (viewMatrix * vec4(lightPos, 1)).xyz - worldPosition.xyz;
 
-	vec4 worldPosition = projectionMatrix * viewMatrix * transformMatrix * vec4(in_position, 1);
-
-	gl_Position = worldPosition;
+	gl_Position = projectionMatrix * worldPosition;
 }
 
 

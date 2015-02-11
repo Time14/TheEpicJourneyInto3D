@@ -41,9 +41,9 @@ public class Transform {
 		matrix.setIdentity();
 		
 		matrix.translate(position);
-		matrix.rotate((float)Math.toRadians(rotation.x), new Vector3f(1, 0, 0));
-		matrix.rotate((float)Math.toRadians(rotation.y), new Vector3f(0, 1, 0));
 		matrix.rotate((float)Math.toRadians(rotation.z), new Vector3f(0, 0, 1));
+		matrix.rotate((float)Math.toRadians(rotation.y), new Vector3f(0, 1, 0));
+		matrix.rotate((float)Math.toRadians(rotation.x), new Vector3f(1, 0, 0));
 		matrix.scale(scale);
 		
 		return matrix;

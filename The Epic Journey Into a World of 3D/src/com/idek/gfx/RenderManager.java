@@ -30,6 +30,8 @@ public class RenderManager {
 	
 	private HashMap<String, Entity> entities;
 	
+//	public ArrayList<>
+	
 	public RenderManager(Core core) {
 		this.core = core;
 		entities = new HashMap<>();
@@ -44,7 +46,7 @@ public class RenderManager {
 			e.update();
 		}
 		
-		getEntity("Monkey Head").rotateY(1);
+//		getEntity("Monkey Head").rotateY(1);
 	}
 	
 	public void draw() {
@@ -81,18 +83,25 @@ public class RenderManager {
 	public void createEntities() {
 		addEntity("Monkey Head", new Entity(Loader.loadOBJMesh("res/obj/icoSphere/icoSphereMatTest.obj")));
 		getEntity("Monkey Head").setPosition(0, 0, 3);
+		addEntity("i1", new Entity(Loader.loadOBJMesh("res/obj/icoSphere/icoSphereMatTest.obj")));
+		getEntity("i1").setPosition(-3, 3, 3);
+		addEntity("i2", new Entity(Loader.loadOBJMesh("res/obj/icoSphere/icoSphereMatTest.obj")));
+		getEntity("i2").setPosition(3, 0, 3);
 	}
 	
-	public void setBGColor(float r, float g, float b) {
+	public RenderManager setBGColor(float r, float g, float b) {
 		setBGColor(r, g, b, 1);
+		return this;
 	}
 	
-	public void setBGColor(float r, float g, float b, float a) {
+	public RenderManager setBGColor(float r, float g, float b, float a) {
 		setBGColor(new Vector4f(r, g, b, a));
+		return this;
 	}
 	
-	public void setBGColor(Vector4f color) {
+	public RenderManager setBGColor(Vector4f color) {
 		bg = color;
+		return this;
 	}
 	
 	public void setFullsreen(boolean b) {

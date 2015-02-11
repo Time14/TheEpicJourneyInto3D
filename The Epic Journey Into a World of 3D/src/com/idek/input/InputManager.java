@@ -32,8 +32,7 @@ public class InputManager {
 	
 	private void checkMouse() {
 				
-		camera.rotate(-Mouse.getDY(), Mouse.getDX(), 0);
-		
+		camera.rotate(-Mouse.getDY() * Camera.SENSITIVITY, Mouse.getDX() * Camera.SENSITIVITY, 0);
 		float rx = camera.getTransform().rotation.x;
 		
 		if(rx > 90 && rx < 270) {
@@ -64,13 +63,13 @@ public class InputManager {
 		float speed = 0.1f;
 		
 		if(isKeyDown(KEY_W))
-			camera.translateZ(speed);
+			camera.moveForward(speed);
 		if(isKeyDown(KEY_A))
-			camera.translateX(-speed);
+			camera.moveRight(-speed);
 		if(isKeyDown(KEY_S))
-			camera.translateZ(-speed);
+			camera.moveForward(-speed);
 		if(isKeyDown(KEY_D))
-			camera.translateX(speed);
+			camera.moveRight(speed);
 		if(isKeyDown(KEY_LSHIFT))
 			camera.translateY(-speed);
 		if(isKeyDown(KEY_SPACE))
