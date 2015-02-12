@@ -73,7 +73,6 @@ public class Entity {
 	public void draw() {
 		program.bind();
 		program.sendTransformMatrix(transform.getMatrix());
-		program.sendProjectionMatrix(Transform.getProjectionMatrix());
 		if(!camera.isUpdated())
 			program.sendViewMatrix(camera.setUpdated(true).getViewMatrix());
 		material.bind();

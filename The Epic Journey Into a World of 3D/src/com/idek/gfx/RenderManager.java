@@ -17,6 +17,8 @@ import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 import com.idek.gfx.entity.Entity;
+import com.idek.gfx.light.DirectionalLight;
+import com.idek.gfx.light.Light;
 import com.idek.gfx.shader.ShaderProgram;
 import com.idek.gfx.shader.ShaderProgram3D;
 import com.idek.main.Core;
@@ -30,15 +32,19 @@ public class RenderManager {
 	
 	private HashMap<String, Entity> entities;
 	
-//	public ArrayList<>
+	private HashMap<String, Light> lights;
+	
+//	public ArrayList<Entity> funkyToruses;
 	
 	public RenderManager(Core core) {
 		this.core = core;
 		entities = new HashMap<>();
+		lights = new HashMap<>();
 		
 		initGL();
 		
 		createEntities();
+		createLights();
 	}
 	
 	public RenderManager update() {
@@ -59,6 +65,11 @@ public class RenderManager {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		ShaderProgram3D.INSTANCE.bind();
+		
+		for(Light l : lights.values()) {
+			
+		}
+		
 		for(Entity e : entities.values()) {
 			e.draw();
 		}
@@ -85,6 +96,14 @@ public class RenderManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		return this;
+	}
+	
+	public RenderManager createLights() {
+		
+		addLight("Light1", new DirectionalLight());
+		
 		
 		return this;
 	}
@@ -143,6 +162,12 @@ public class RenderManager {
 	
 	public RenderManager addEntity(String key, Entity e) {
 		entities.put(key, e);
+	
+		return this;
+	}
+	
+	public RenderManager addLight(String key, Light l) {
+		lights.put(key, l);
 	
 		return this;
 	}

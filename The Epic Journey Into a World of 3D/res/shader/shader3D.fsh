@@ -7,6 +7,15 @@ uniform mat4 viewMatrix;
 
 uniform sampler2D[] textures;
 
+struct Light {
+	bool isDirectional;
+	float fallOff;
+	vec3 position;
+	vec3 color;
+}
+
+uniform Light[] lights;
+
 in vec2 pass_texCoord;
 in vec3 pass_normal;
 in vec3 pass_toLight;
@@ -16,9 +25,9 @@ void main() {
 
 	vec3 lightColor = vec3(1, 1, 1);
 
-	vec3 localNormal = pass_normal + (viewMatrix * texture2D(textures[1], pass_texCoord)).xyz;
+	vec3 finalNormal = normalize(pass_normal + (viewMatrix * texture2D(textures[1], pass_texCoord)).xyz);
 
-	vec3 diffuse = dot(normalize(pass_toLight), normalize(localNormal)) * lightColor;
+	vec3 diffuse = dot(normalize(pass_toLight), finalNormal) * lightColor;
 
 	out_color = vec4(diffuse, 1) * texture2D(textures[0], pass_texCoord);
 }

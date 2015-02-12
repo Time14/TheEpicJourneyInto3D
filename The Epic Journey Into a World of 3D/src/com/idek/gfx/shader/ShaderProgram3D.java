@@ -2,6 +2,7 @@ package com.idek.gfx.shader;
 
 import org.lwjgl.util.vector.Matrix4f;
 
+import com.idek.gfx.Transform;
 import com.idek.gfx.vertex.Vertex3D;
 import com.idek.util.Util;
 
@@ -18,6 +19,8 @@ public class ShaderProgram3D extends ShaderProgram {
 	public ShaderProgram3D() {
 		super("res/shader/shader3D.vsh", "res/shader/shader3D.fsh");
 		initSamplers();
+		
+		sendProjectionMatrix(Transform.getProjectionMatrix());
 	}
 	
 	protected void registerUniformLocations() {
