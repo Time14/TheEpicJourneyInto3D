@@ -5,6 +5,7 @@ import java.security.InvalidParameterException;
 
 import org.lwjgl.util.vector.Matrix4f;
 
+import com.idek.gfx.Camera;
 import com.idek.gfx.Transform;
 import com.idek.gfx.light.Light;
 import com.idek.gfx.vertex.Vertex3D;
@@ -30,7 +31,7 @@ public class ShaderProgram3D extends ShaderProgram {
 		super("res/shader/shader3D.vsh", "res/shader/shader3D.fsh");
 		initSamplers();
 		
-		sendProjectionMatrix(Transform.getProjectionMatrix());
+		sendProjectionMatrix(Camera.getProjectionMatrix());
 	}
 	
 	protected void registerUniformLocations() {

@@ -50,6 +50,8 @@ public class RenderManager {
 		createLights();
 	}
 	
+	
+	
 	public RenderManager update() {
 		
 		Display.setTitle(Core.DEFAULT_TITLE + " FPS: " + Time.getFPS());
@@ -122,9 +124,9 @@ public class RenderManager {
 	
 	public RenderManager createLights() {
 		
-//		addLight("Light1", new PointLight());
+		addLight("Light1", new PointLight());
 //		
-//		((PointLight)getLight("Light1")).color = new Vector3f(1, 1, 1);
+		((PointLight)getLight("Light1")).color = new Vector3f(1, 1, 1);
 		
 		addLight("Light2", new DirectionalLight());
 		((DirectionalLight)getLight("Light2")).direction = new Vector3f(0, 1, 0);

@@ -6,14 +6,6 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class Transform {
 	
-	public static final float DEFAULT_FOV = 70;
-	public static final float DEFAULT_ZNEAR = 0.0001f;
-	public static final float DEFAULT_ZFAR = 100;
-	
-	private static float fov = DEFAULT_FOV;
-	private static float zNear = DEFAULT_ZNEAR;
-	private static float zFar = DEFAULT_ZFAR;
-	
 	public Vector3f position;
 	public Vector3f rotation;
 	public Vector3f scale;
@@ -263,26 +255,5 @@ public class Transform {
 	public Transform translate(Vector3f offset) {
 		position.translate(offset.x, offset.y, offset.z);
 		return this;
-	}
-	
-	public static final Matrix4f getProjectionMatrix() {
-		Matrix4f matrix = new Matrix4f();
-		
-		float tanHalfFOV = Math.abs((float)Math.tan(Math.toRadians(fov/2)));
-		float zRange = zNear - zFar;
-		float ar = ((float)Display.getWidth()) / Display.getHeight();
-		
-		matrix.m00 = 1f/(tanHalfFOV*ar); matrix.m10 = 0;			 matrix.m20 = 0;					matrix.m30 = 0;
-		matrix.m01 = 0;					 matrix.m11 = 1f/tanHalfFOV; matrix.m21 = 0;					matrix.m31 = 0;
-		matrix.m02 = 0;					 matrix.m12 = 0;			 matrix.m22 = (-zNear-zFar)/zRange;	matrix.m32 = (2*zNear*zFar)/zRange;
-		matrix.m03 = 0;					 matrix.m13 = 0;			 matrix.m23 = 1;					matrix.m33 = 0;
-		
-		return matrix;
-	}
-	
-	public static final void setPerspectiveProjection(float fov, float zNear, float zFar) {
-		Transform.fov = fov;
-		Transform.zNear = zNear;
-		Transform.zFar = zFar;
 	}
 }
