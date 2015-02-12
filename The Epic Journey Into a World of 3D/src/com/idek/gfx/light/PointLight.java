@@ -4,7 +4,10 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class PointLight extends Light {
 	
-	public static final float DEFAULT_FALLOFF = 10;
+	public static final int LOCAL_SIZE = 7;
+	public static final int TOTAL_SIZE = Light.SIZE;
+	
+	public static final float DEFAULT_FALLOFF = 5;
 	public static final Vector3f DEFAULT_POSITION = new Vector3f();
 	public static final Vector3f DEFAULT_COLOR = new Vector3f(1, 1, 1);
 	
@@ -12,7 +15,7 @@ public class PointLight extends Light {
 	public Vector3f position = DEFAULT_POSITION;
 	public Vector3f color = DEFAULT_COLOR;
 	
-	protected float[] getData() {
+	public float[] getData() {
 		return new float[]{
 				0,
 				fallOff,
@@ -21,4 +24,7 @@ public class PointLight extends Light {
 		};
 	}
 	
+	public int getSize() {
+		return LOCAL_SIZE;
+	}
 }

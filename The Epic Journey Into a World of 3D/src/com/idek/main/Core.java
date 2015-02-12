@@ -9,6 +9,7 @@ import org.lwjgl.opengl.DisplayMode;
 import com.idek.gfx.Camera;
 import com.idek.gfx.RenderManager;
 import com.idek.input.InputManager;
+import com.idek.time.Time;
 
 
 public class Core {
@@ -51,6 +52,7 @@ public class Core {
 	}
 	
 	private void gameLoop() {
+		Time.update();
 		im.update();
 		rm.update();
 		rm.draw();

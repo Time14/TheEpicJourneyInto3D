@@ -7,6 +7,7 @@ import java.nio.IntBuffer;
 
 import org.lwjgl.util.vector.Matrix4f;
 
+import com.idek.gfx.light.Light;
 import com.idek.gfx.vertex.Vertex3D;
 
 public final class Util {
@@ -30,6 +31,15 @@ public final class Util {
 	public static final FloatBuffer toFloatBuffer(Matrix4f matrix) {
 		FloatBuffer buffer = createFloatBuffer(16);
 		matrix.store(buffer);
+		buffer.flip();
+		return buffer;
+	}
+	
+	public static final FloatBuffer toFloatBuffer(Light[] lights) {
+		FloatBuffer buffer = createFloatBuffer(lights.length * Light.SIZE);
+		for(Light l : lights) {
+			buffer.put(l.getData());
+		}
 		buffer.flip();
 		return buffer;
 	}

@@ -19,10 +19,13 @@ import org.lwjgl.util.vector.Vector4f;
 import com.idek.gfx.entity.Entity;
 import com.idek.gfx.light.DirectionalLight;
 import com.idek.gfx.light.Light;
+import com.idek.gfx.light.PointLight;
 import com.idek.gfx.shader.ShaderProgram;
 import com.idek.gfx.shader.ShaderProgram3D;
 import com.idek.main.Core;
+import com.idek.time.Time;
 import com.idek.util.Loader;
+import com.idek.util.Util;
 
 public class RenderManager {
 	
@@ -48,6 +51,9 @@ public class RenderManager {
 	}
 	
 	public RenderManager update() {
+		
+		Display.setTitle(Core.DEFAULT_TITLE + " FPS: " + Time.getFPS());
+		
 		for(Entity e : entities.values()) {
 			e.update();
 		}
@@ -56,7 +62,7 @@ public class RenderManager {
 		getEntity("i1").rotateX(1);
 		getEntity("i2").rotateZ(1);
 		getEntity("i3").rotate(1, 1, 1);
-	
+		
 		return this;
 	}
 	
@@ -66,8 +72,22 @@ public class RenderManager {
 		
 		ShaderProgram3D.INSTANCE.bind();
 		
+		boolean lightsNeedUpdate = false;
 		for(Light l : lights.values()) {
+			if(!l.isUpdated()) {
+				lightsNeedUpdate = true;
+				break;
+			}
+		}
+		
+		if(lightsNeedUpdate) {
+			Light[] data = new Light[lights.size()];
+			data = lights.values().toArray(data);
 			
+			for(Light l : data)
+				l.setUpdated(true);
+			
+			ShaderProgram3D.INSTANCE.sendLights(data);
 		}
 		
 		for(Entity e : entities.values()) {
@@ -102,8 +122,12 @@ public class RenderManager {
 	
 	public RenderManager createLights() {
 		
-		addLight("Light1", new DirectionalLight());
+//		addLight("Light1", new PointLight());
+//		
+//		((PointLight)getLight("Light1")).color = new Vector3f(1, 1, 1);
 		
+		addLight("Light2", new DirectionalLight());
+		((DirectionalLight)getLight("Light2")).direction = new Vector3f(0, 1, 0);
 		
 		return this;
 	}
@@ -174,6 +198,10 @@ public class RenderManager {
 	
 	public Entity getEntity(String key) {
 		return entities.get(key);
+	}
+	
+	public Light getLight(String key) {
+		return lights.get(key).setUpdated(false);
 	}
 	
 	public RenderManager cleanUp() {

@@ -19,19 +19,24 @@ import com.idek.gfx.shader.ShaderProgram3D;
 
 public abstract class Light {
 	
+	public static final int SIZE = 8;
+	public static final int NUM_COMPONENTS = 4;
+	
 	protected ShaderProgram3D shader = ShaderProgram3D.INSTANCE;
 	
-	protected boolean isUpdated = false;
+	protected boolean updated = false;
 	
-	public float[] getLightData() {
-		isUpdated = true;
-		return getData();
+	public abstract float[] getData();
+	
+	public Light setUpdated(boolean updated) {
+		this.updated = updated;
+		return this;
 	}
-	
-	protected abstract float[] getData();
 	
 	public boolean isUpdated() {
-		return isUpdated;
+		return updated;
 	}
+	
+	public abstract int getSize();
 	
 }
