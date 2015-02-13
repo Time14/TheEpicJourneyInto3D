@@ -13,7 +13,11 @@ public class Transform {
 	public Transform() {
 		this(new Vector3f());
 	}
-		
+	
+	public Transform(float x, float y, float z) {
+		this(new Vector3f(x, y, z));	
+	}
+	
 	public Transform(Vector3f position) {
 		this(position, new Vector3f());	
 	}

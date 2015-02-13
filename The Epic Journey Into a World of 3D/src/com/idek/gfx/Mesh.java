@@ -16,6 +16,8 @@ import com.idek.util.Util;
 
 public class Mesh {
 	
+	private static int currentVAO = -2;
+	
 	private int vao = -2;
 	private int vbo = -2;
 	private int ibo = -2;
@@ -71,7 +73,10 @@ public class Mesh {
 	}
 	
 	public void draw() {
-		glBindVertexArray(vao);
+		if(currentVAO != vao) {
+			glBindVertexArray(vao);
+			currentVAO = vao;
+		}
 		
 		if(indices == null) {
 			glDrawArrays(mode, 0, vertices.length);

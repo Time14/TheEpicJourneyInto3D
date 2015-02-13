@@ -14,7 +14,7 @@ import com.idek.time.Time;
 
 public class Core {
 	
-	public static final boolean VSYNC_ENABLED = true;
+	public static final boolean VSYNC_ENABLED = false;
 	public static final int DEFAULT_WIDTH = 800;
 	public static final int DEFAULT_HEIGHT = 600;
 	public static final String DEFAULT_TITLE = "Independent Developing Economic Kompany (TEJIAWO3D)";
