@@ -272,5 +272,6 @@ public class Entity {
 	
 	public void cleanUp() {
 		mesh.cleanUp();
+		material.cleanUp();
 	}
 }

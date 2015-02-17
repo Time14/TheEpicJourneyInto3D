@@ -1,5 +1,6 @@
 package com.idek.gfx.light;
 
+import com.idek.gfx.Texture;
 import com.idek.gfx.shader.ShaderProgram3D;
 
 /*
@@ -26,6 +27,8 @@ public abstract class Light {
 	
 	protected boolean updated = false;
 	
+	protected Texture shadowMap;
+	
 	public abstract float[] getData();
 	
 	public Light setUpdated(boolean updated) {
@@ -37,6 +40,15 @@ public abstract class Light {
 		return updated;
 	}
 	
-	public abstract int getSize();
+	public void initFrameBuffer() {
+		
+	}
 	
+	public abstract int getSize();
+	public abstract void createShadowMap();
+	
+	public void cleanUp() {
+		if(shadowMap != null)
+			shadowMap.cleanUp();
+	}
 }

@@ -61,4 +61,9 @@ public class Material {
 		normalMap.bind(1);
 		return this;
 	}
+	
+	public void cleanUp() {
+		texture.cleanUp();
+		normalMap.cleanUp();
+	}
 }
