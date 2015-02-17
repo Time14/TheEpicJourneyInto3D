@@ -2,6 +2,10 @@ package com.idek.gfx.light;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL30.*;
+
 public class PointLight extends Light {
 	
 	public static final int LOCAL_SIZE = 7;
@@ -22,6 +26,10 @@ public class PointLight extends Light {
 				position.x, position.y, position.z,
 				color.x, color.y, color.z
 		};
+	}
+	
+	public void createShadowMap() {
+		
 	}
 	
 	public int getSize() {

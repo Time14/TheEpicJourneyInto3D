@@ -18,9 +18,9 @@ import com.idek.util.Util;
 
 public class Texture {
 	
-	private int id  	= -2;
-	private int width  	= -2;
-	private int height  = -2;
+	protected int id  	= -2;
+	protected int width  	= -2;
+	protected int height  = -2;
 	
 	public Texture() {}
 	
@@ -42,7 +42,7 @@ public class Texture {
 			int[] pixels = new int[width * height];
 			image.getRGB(0, 0, width, height, pixels, 0, width);
 		
-			loadTexture(pixels, repeat, width, height);
+			genTexture(pixels, repeat, width, height);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -50,7 +50,7 @@ public class Texture {
 		return this;
 	}
 	
-	public Texture loadTexture(int[] pixels, boolean repeat, int width, int height) {
+	public Texture genTexture(int[] pixels, boolean repeat, int width, int height) {
 		this.width = width;
 		this.height = height;
 		
@@ -84,6 +84,10 @@ public class Texture {
 		return this;
 	}
 	
+	public void cleanUp() {
+		glDeleteTextures(id);
+	}
+	
 	public static final Texture DEFAULT_TEXTURE = new Texture("res/texture/UV_mapper.png");
-	public static final Texture DEFAULT_NORMAL_MAP = new Texture().loadTexture(new int[]{0x00888800}, false, 1, 1);
+	public static final Texture DEFAULT_NORMAL_MAP = new Texture().genTexture(new int[]{0x00888800}, false, 1, 1);
 }

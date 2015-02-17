@@ -4,6 +4,8 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class DirectionalLight extends Light {
 	
+	public static final int SHADOW_MAP_WIDTH = 1024;
+	public static final int SHADOW_MAP_HEIGHT = 1024;
 	public static final int LOCAL_SIZE = 6;
 	public static final int TOTAL_SIZE = Light.SIZE;
 	
@@ -25,6 +27,10 @@ public class DirectionalLight extends Light {
 				direction.x, direction.y, direction.z,
 				color.x, color.y, color.z
 		};
+	}
+	
+	public void createShadowMap() {
+		
 	}
 	
 	public int getSize() {

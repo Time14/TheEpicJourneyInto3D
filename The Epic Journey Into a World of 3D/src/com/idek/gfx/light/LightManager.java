@@ -12,16 +12,12 @@ public class LightManager {
 	
 	private ArrayList<Light> lights;
 	
-	private HashMap<Light, Texture> shadowMaps;
-	
 	public LightManager() {
 		lights = new ArrayList<>();
-		shadowMaps = new HashMap<>();
 	}
 	
 	public LightManager addLight(Light light) {
 		lights.add(light);
-		addShadowMap(light);
 		return this;
 	}
 	
@@ -29,10 +25,6 @@ public class LightManager {
 		addLight(new DirectionalLight());
 		
 		return this;
-	}
-	
-	private void addShadowMap(Light light) {
-		shadowMaps.put(light, new Texture());
 	}
 	
 	public LightManager update() {
@@ -46,8 +38,9 @@ public class LightManager {
 	}
 	
 	public void cleanUp() {
+		for(Light l : lights)
+			l.cleanUp();
 		lights.clear();
-		shadowMaps.clear();
 	}
 	
 	/*
