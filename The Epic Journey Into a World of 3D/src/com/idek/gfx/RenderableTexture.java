@@ -7,35 +7,49 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL32.*;
 
+import java.nio.ByteBuffer;
 import java.security.InvalidParameterException;
 
+import com.idek.gfx.shader.ShaderProgram;
+import com.idek.gfx.shader.ShaderProgram3D;
 import com.idek.util.Util;
 
 public class RenderableTexture extends Texture {
 	
+	public static final int DEFAULT_INTERNAL_FORMAT = GL_RGBA;
+	public static final int DEFAULT_ATTACHMENT = GL_COLOR_ATTACHMENT0;
+	
 	public static final int DEFAULT_WIDTH = 128;
 	public static final int DEFAULT_HEIGHT = 128;
 	
-	public static final int COMPONENT_DEPTH32 = GL_DEPTH_COMPONENT32;
-	public static final int COMPONENT_DEPTH24 = GL_DEPTH_COMPONENT24;
-	public static final int COMPONENT_DEPTH16 = GL_DEPTH_COMPONENT16;
-	public static final int COMPONENT_DEPTH = GL_DEPTH_COMPONENT;
-	public static final int ATTACHEMENT_DEPTH = GL_DEPTH_ATTACHMENT;
-	public static final int FORMAT_RGBA = GL_RGBA;
-	public static final int FORMAT_BGRA = GL_BGRA;
-	public static final int FORMAT_RGB = GL_RGB;
+	private boolean hasDepthBuffer;
 	
 	private int id = -2;
 	private int fbo = -2;
 	private int rbo = -2;
 	
-	public RenderableTexture(int width, int height, int format, boolean useDepthBuffer) {
-		
+	public RenderableTexture() {}
+	
+	public RenderableTexture(int width, int height) {
+		this(width, height, DEFAULT_INTERNAL_FORMAT);
 	}
 	
-	public RenderableTexture genTexture(int width, int height, int[] internalFormat, int[] attachments, boolean useDepthBuffer) {
+	public RenderableTexture(int width, int height, int internalFormat) {
+		this(width, height, internalFormat, new int[]{DEFAULT_ATTACHMENT});
+	}
+	
+	public RenderableTexture(int width, int height, int internalFormat, int[] attachments) {
+		this(width, height, internalFormat, attachments, false);
+	}
+	
+	public RenderableTexture(int width, int height, int internalFormat, int[] attachments, boolean useDepthBuffer) {
+		initialize(width, height, internalFormat, attachments, useDepthBuffer);
+	}
+	
+	public RenderableTexture initialize(int width, int height, int internalFormat, int[] attachments, boolean useDepthBuffer) {
 		this.width = width;
 		this.height = height;
+		hasDepthBuffer = useDepthBuffer;
 		
 		id = glGenTextures();
 		
@@ -48,16 +62,15 @@ public class RenderableTexture extends Texture {
 		
 		int type;
 		
-		switch(internalFormat[0]) {
+		switch(internalFormat) {
 		default: type = GL_UNSIGNED_BYTE; break;
 		case GL_DEPTH_COMPONENT: type = GL_FLOAT; break;
 		case GL_DEPTH_COMPONENT16: type = GL_FLOAT; break;
+		case GL_DEPTH_COMPONENT24: type = GL_FLOAT; break;
+		case GL_DEPTH_COMPONENT32: type = GL_FLOAT; break;
 		}
 		
-		if(internalFormat[1] == 0)
-			internalFormat[1] = GL_RGBA;
-		
-		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat[0], width, height, 0, internalFormat[1], type, 0);
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, program.getOutputFormat(), type, (ByteBuffer) null);
 		
 		fbo = glGenFramebuffers();
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -78,22 +91,28 @@ public class RenderableTexture extends Texture {
 			else
 				drawBuffers[i] = attachments[i];
 		
-		glDrawBuffer(drawBuffers);
+		glDrawBuffers(Util.toIntBuffer(drawBuffers));
+		
+//		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//		glBindRenderbuffer(GL_RENDERBUFFER, 0);
 		
 		return this;
 	}
 	
-	public RenderableTexture bindAsRenderTarget() {
-		
-		
-		
+	public RenderableTexture releaseRenderTarget() {
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 		return this;
 	}
 	
-	public static final int GL_COLOR_ATTACHMENT(int attachment) {
-		if(attachment > 15)
-			throw new InvalidParameterException("Attachment ID must be in range of 0 - 15. INVALID: " + attachment);
-		return GL_COLOR_ATTACHMENT0 + attachment;
+	public RenderableTexture bindAsRenderTarget(boolean clear) {
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo);
+		glClearColor(1, 1, 0, 1);
+		if(clear)
+			glClear(GL_COLOR_BUFFER_BIT | (hasDepthBuffer ? GL_DEPTH_BUFFER_BIT : 0));
+		return this;
 	}
 	
+	public boolean hasDepthBuffer() {
+		return hasDepthBuffer;
+	}
 }

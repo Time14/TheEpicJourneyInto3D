@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.idek.gfx.MeshLibrary;
 import com.idek.gfx.RenderManager;
+import com.idek.gfx.RenderableTexture;
 import com.idek.gfx.Transform;
 import com.idek.gfx.shader.ShaderProgram3D;
 import com.idek.util.Loader;

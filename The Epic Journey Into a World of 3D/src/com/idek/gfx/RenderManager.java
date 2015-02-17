@@ -18,12 +18,14 @@ import org.lwjgl.util.vector.Vector4f;
 
 import com.idek.gfx.entity.Entity;
 import com.idek.gfx.entity.EntityManager;
+import com.idek.gfx.entity.EntityQuad;
 import com.idek.gfx.light.DirectionalLight;
 import com.idek.gfx.light.Light;
 import com.idek.gfx.light.LightManager;
 import com.idek.gfx.light.PointLight;
 import com.idek.gfx.shader.ShaderProgram;
 import com.idek.gfx.shader.ShaderProgram3D;
+import com.idek.gfx.vertex.Vertex3D;
 import com.idek.main.Core;
 import com.idek.time.Time;
 import com.idek.util.Loader;
@@ -48,6 +50,9 @@ public class RenderManager {
 		
 		em.createEntities();
 		lm.createLights();
+		
+		texture = new RenderableTexture(128, 128, GL_RGBA, new int[]{GL_COLOR_ATTACHMENT0}, true);
+		quad.sendMaterial(new Material().sendTexture(texture));
 	}
 	
 	
@@ -60,11 +65,20 @@ public class RenderManager {
 		return this;
 	}
 	
+	RenderableTexture texture;
+	Entity quad = new EntityQuad(0, 0, 1, .1f, .1f);
+	
 	public RenderManager draw() {
+		glClearColor(bg.x, bg.y, bg.z, bg.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		lm.update();
+		texture.bindAsRenderTarget(true);
 		em.draw();
+		texture.releaseRenderTarget();
+		Camera.INSTANCE.setIdle(true);
+		quad.draw();
+		Camera.INSTANCE.setIdle(false);
 		
 		return this;
 	}

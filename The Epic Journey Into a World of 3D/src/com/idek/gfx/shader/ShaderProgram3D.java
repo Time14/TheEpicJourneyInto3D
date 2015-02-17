@@ -11,11 +11,12 @@ import com.idek.gfx.light.Light;
 import com.idek.gfx.vertex.Vertex3D;
 import com.idek.util.Util;
 
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
 public class ShaderProgram3D extends ShaderProgram {
 	
+	public static final int OUTPUT_FORMAT = GL_RGBA;
 	public static final int MAXIMUM_AMOUNT_OF_LIGHTS = 10;
 	
 	public static final String[] STRUCT_VAR_NAMES_LIGHT = new String[]{"isDirectional", "fallOff", "position", "color"};
@@ -102,6 +103,10 @@ public class ShaderProgram3D extends ShaderProgram {
 	
 	public int getStructLocation(String structName, int index, String structVar) {
 		return ul.get(structName + "[" + index + "]." + structVar);
+	}
+	
+	public int getOutputFormat() {
+		return OUTPUT_FORMAT;
 	}
 	
 	public static final ShaderProgram3D INSTANCE = new ShaderProgram3D();

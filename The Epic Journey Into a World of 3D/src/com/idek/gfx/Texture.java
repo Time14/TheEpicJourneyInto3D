@@ -13,10 +13,16 @@ import static org.lwjgl.opengl.GL32.*;
 import java.awt.image.BufferedImage;
 import java.security.InvalidParameterException;
 
+import com.idek.gfx.shader.ShaderProgram;
+import com.idek.gfx.shader.ShaderProgram3D;
 import com.idek.util.Loader;
 import com.idek.util.Util;
 
 public class Texture {
+	
+	public static final ShaderProgram DEFAULT_SHADER_PROGRAM = ShaderProgram3D.INSTANCE;
+	
+	protected ShaderProgram program = DEFAULT_SHADER_PROGRAM;
 	
 	protected int id  	= -2;
 	protected int width  	= -2;
@@ -82,6 +88,10 @@ public class Texture {
 		glActiveTexture(GL_TEXTURE0 + target);
 		glBindTexture(GL_TEXTURE_2D, id);
 		return this;
+	}
+	
+	public Texture bind() {
+		return bind(0);
 	}
 	
 	public void cleanUp() {

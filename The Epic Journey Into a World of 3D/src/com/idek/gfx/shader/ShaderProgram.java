@@ -80,6 +80,7 @@ public abstract class ShaderProgram {
 	
 	protected abstract void registerUniformLocations();
 	public abstract void initAttributes();
+	public abstract int getOutputFormat();
 	
 	protected void registerUniformLocation(String uniform) {
 		ul.put(uniform, getUniformLocation(uniform));

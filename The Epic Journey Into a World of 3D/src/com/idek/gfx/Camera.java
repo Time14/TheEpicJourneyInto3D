@@ -20,8 +20,11 @@ public class Camera {
 	
 	private boolean isUpdated;
 	
+	private boolean idle;
+	
 	public Camera() {
 		isUpdated = false;
+		idle = false;
 		transform = new Transform();
 	}
 	
@@ -179,7 +182,10 @@ public class Camera {
 	}
 	
 	public Matrix4f getViewMatrix() {
-		return (Matrix4f)transform.getMatrix().invert();
+		if(idle)
+			return (Matrix4f)new Matrix4f().setIdentity();
+		else
+			return (Matrix4f)transform.getMatrix().invert();
 	}
 	
 	public static final Matrix4f getProjectionMatrix() {
@@ -201,6 +207,16 @@ public class Camera {
 		Camera.fov = fov;
 		Camera.zNear = zNear;
 		Camera.zFar = zFar;
+	}
+	
+	public Camera setIdle(boolean idle) {
+		isUpdated = false;
+		this.idle = idle;
+		return this;
+	}
+	
+	public boolean isIdle() {
+		return idle;
 	}
 	
 	public static final Camera INSTANCE = new Camera();

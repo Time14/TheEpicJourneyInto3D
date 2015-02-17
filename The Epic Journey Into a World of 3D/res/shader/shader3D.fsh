@@ -23,7 +23,7 @@ in vec2 pass_texCoord;
 in vec3 pass_normal;
 in vec3 pass_toLight[MAX_NUM_LIGHTS];
 
-out vec4 out_color;
+layout(location = 0) out vec4 out_color;
 void main() {
 
 	vec3 diffuse = vec3(0, 0, 0);
@@ -39,7 +39,7 @@ void main() {
 
 	}
 
-	out_color = vec4(diffuse, 1) * texture2D(textures[0], pass_texCoord);
+	out_color = texture2D(textures[0], pass_texCoord);
 }
 
 /*

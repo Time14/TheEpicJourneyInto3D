@@ -42,14 +42,17 @@ public class Entity {
 	}
 	
 	public Entity sendMesh(Mesh mesh) {
-		
 		this.mesh = mesh;
 		return this;
 	}
 	
 	public Entity sendTransform(Transform transform) {
-		
 		this.transform = transform;
+		return this;
+	}
+	
+	public Entity sendMaterial(Material material) {
+		this.material = material;
 		return this;
 	}
 	
