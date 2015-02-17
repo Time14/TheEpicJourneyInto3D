@@ -12,9 +12,14 @@ import com.idek.input.InputManager;
 import com.idek.time.Time;
 
 
+/**
+ * 
+ * @author Alfred Sporre & Edvard Thörnros
+ *
+ */
 public class Core {
 	
-	public static final boolean VSYNC_ENABLED = false;
+	public static final boolean VSYNC_ENABLED = true;
 	public static final int DEFAULT_WIDTH = 800;
 	public static final int DEFAULT_HEIGHT = 600;
 	public static final String DEFAULT_TITLE = "Independent Developing Economic Kompany (TEJIAWO3D)";

@@ -40,6 +40,8 @@ public class LightManager {
 		Light[] data = new Light[]{};
 		program.sendLights(lights.toArray(data));
 		
+		
+		
 		return this;
 	}
 	
