@@ -10,13 +10,16 @@ import static org.lwjgl.opengl.GL32.*;
 import java.nio.ByteBuffer;
 import java.security.InvalidParameterException;
 
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GLContext;
+
 import com.idek.gfx.shader.ShaderProgram;
 import com.idek.gfx.shader.ShaderProgram3D;
 import com.idek.util.Util;
 
 public class RenderableTexture extends Texture {
 	
-	public static final int DEFAULT_INTERNAL_FORMAT = GL_RGBA;
+	public static final int DEFAULT_INTERNAL_FORMAT = GL_RGBA8;
 	public static final int DEFAULT_ATTACHMENT = GL_COLOR_ATTACHMENT0;
 	
 	public static final int DEFAULT_WIDTH = 128;
@@ -24,7 +27,6 @@ public class RenderableTexture extends Texture {
 	
 	private boolean hasDepthBuffer;
 	
-	private int id = -2;
 	private int fbo = -2;
 	private int rbo = -2;
 	
@@ -47,13 +49,17 @@ public class RenderableTexture extends Texture {
 	}
 	
 	public RenderableTexture initialize(int width, int height, int internalFormat, int[] attachments, boolean useDepthBuffer) {
+		if(!GLContext.getCapabilities().GL_EXT_framebuffer_object) {
+			System.err.println("FrameBuffers not supported on your graphics card!");
+		}
+		
 		this.width = width;
 		this.height = height;
 		hasDepthBuffer = useDepthBuffer;
 		
 		id = glGenTextures();
+		bind();
 		
-		glBindTexture(GL_TEXTURE_2D, id);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		
@@ -70,17 +76,22 @@ public class RenderableTexture extends Texture {
 		case GL_DEPTH_COMPONENT32: type = GL_FLOAT; break;
 		}
 		
-		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, program.getOutputFormat(), type, (ByteBuffer) null);
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, program.getOutputFormat(), type, (ByteBuffer)null);
 		
-		fbo = glGenFramebuffers();
-		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+		unbind();
+		
 		if(useDepthBuffer) {
 			rbo = glGenRenderbuffers();
 			glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo);
+			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+			glBindRenderbuffer(GL_RENDERBUFFER, 0);
 		}
 		
+		fbo = glGenFramebuffers();
+		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+		
+		if(useDepthBuffer)
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, attachments[0], GL_TEXTURE_2D, id, 0);
 		
 		int[] drawBuffers = new int[attachments.length];
@@ -93,22 +104,26 @@ public class RenderableTexture extends Texture {
 		
 		glDrawBuffers(Util.toIntBuffer(drawBuffers));
 		
-//		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-//		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			System.err.println("Warning! Incomplete Framebuffer");
+		
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		
 		return this;
 	}
 	
 	public RenderableTexture releaseRenderTarget() {
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		glViewport(0, 0, Display.getWidth(), Display.getHeight());
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		return this;
 	}
 	
 	public RenderableTexture bindAsRenderTarget(boolean clear) {
+		glViewport(0, 0, width, height);
+		unbind();
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo);
-		glClearColor(1, 1, 0, 1);
 		if(clear)
-			glClear(GL_COLOR_BUFFER_BIT | (hasDepthBuffer ? GL_DEPTH_BUFFER_BIT : 0));
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		return this;
 	}
 	

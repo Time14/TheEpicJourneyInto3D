@@ -13,8 +13,8 @@ public class Material {
 	
 	private Vector3f baseColor = DEFAULT_BASE_COLOR;
 	
-	private Texture texture = Texture.DEFAULT_TEXTURE;
-	private Texture normalMap = Texture.DEFAULT_NORMAL_MAP;
+	private Texture texture = TextureLibrary.DEFAULT_TEXTURE;
+	private Texture normalMap = TextureLibrary.DEFAULT_NORMAL_MAP;
 	
 	public Material() {}
 	

@@ -94,10 +94,33 @@ public class Texture {
 		return bind(0);
 	}
 	
+	public Texture setParameters(int param, int... pnames) {
+		bind();
+		for(int i : pnames)
+			glTexParameteri(GL_TEXTURE_2D, i, param);
+		return this;
+	}
+	
 	public void cleanUp() {
 		glDeleteTextures(id);
 	}
 	
-	public static final Texture DEFAULT_TEXTURE = new Texture("res/texture/UV_mapper.png");
-	public static final Texture DEFAULT_NORMAL_MAP = new Texture().genTexture(new int[]{0x00888800}, false, 1, 1);
+	public static final void unbindAll() {
+		for(int i = 0; i < 32; i++)
+			unbind(i);
+	}
+	
+	public static final void unbind() {
+		unbind(0);
+	}
+	
+	public static final void unbind(int target) {
+
+		if(target > 31 || target < 0) {
+			throw new InvalidParameterException("Target must be in range 0 - 31");
+		}
+		
+		glActiveTexture(GL_TEXTURE0 + target);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 }

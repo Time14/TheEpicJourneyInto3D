@@ -51,7 +51,7 @@ public class RenderManager {
 		em.createEntities();
 		lm.createLights();
 		
-		texture = new RenderableTexture(128, 128, GL_RGBA, new int[]{GL_COLOR_ATTACHMENT0}, true);
+		texture = (RenderableTexture)new RenderableTexture(512, 512, GL_RGBA8, new int[]{GL_COLOR_ATTACHMENT0}, true).setParameters(GL_REPEAT, GL_TEXTURE_WRAP_S, GL_TEXTURE_WRAP_T);
 		quad.sendMaterial(new Material().sendTexture(texture));
 	}
 	
@@ -66,10 +66,10 @@ public class RenderManager {
 	}
 	
 	RenderableTexture texture;
-	Entity quad = new EntityQuad(0, 0, 1, .1f, .1f);
+	Entity quad = new EntityQuad(-.5f, -.5f, .5f, -1f, -1f, 2f, 2f, 1f, 1f);
 	
 	public RenderManager draw() {
-		glClearColor(bg.x, bg.y, bg.z, bg.w);
+		glClearColor(bg.x, 1, bg.z, bg.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		lm.update();
