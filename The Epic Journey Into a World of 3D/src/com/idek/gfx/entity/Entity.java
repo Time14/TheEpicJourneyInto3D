@@ -19,8 +19,6 @@ public class Entity {
 	
 	private Transform transform;
 	
-	private ShaderProgram3D program = ShaderProgram3D.INSTANCE;
-	
 	private Camera camera = Camera.INSTANCE;
 	
 	public Entity() {
@@ -74,10 +72,10 @@ public class Entity {
 	}
 	
 	public void draw() {
-		program.bind();
-		program.sendTransformMatrix(transform.getMatrix());
+		ShaderProgram3D.INSTANCE.bind();
+		ShaderProgram3D.INSTANCE.sendMatrix(ShaderProgram3D.UNIFORM_TRANSFORM_MATRIX, transform.getMatrix());
 		if(!camera.isUpdated())
-			program.sendViewMatrix(camera.setUpdated(true).getViewMatrix());
+			ShaderProgram3D.INSTANCE.sendMatrix(ShaderProgram3D.UNIFORM_VIEW_MATRIX, camera.setUpdated(true).getViewMatrix());
 		material.bind();
 		mesh.draw();
 	}

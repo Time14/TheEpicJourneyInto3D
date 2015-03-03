@@ -1,7 +1,7 @@
 package com.idek.gfx;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.*;
+import static org.lwjgl.opengl.GL14.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL21.*;
 import static org.lwjgl.opengl.GL30.*;
@@ -51,7 +51,8 @@ public class RenderManager {
 		em.createEntities();
 		lm.createLights();
 		
-		texture = (RenderableTexture)new RenderableTexture(512, 512, GL_RGBA8, new int[]{GL_COLOR_ATTACHMENT0}, true).setParameters(GL_REPEAT, GL_TEXTURE_WRAP_S, GL_TEXTURE_WRAP_T);
+//		texture = (RenderableTexture)new RenderableTexture(256, 256, GL_DEPTH_COMPONENT24, new int[]{GL_DEPTH_ATTACHMENT}, false).setParameters(GL_REPEAT, GL_TEXTURE_WRAP_S, GL_TEXTURE_WRAP_T);
+		texture = (RenderableTexture)new RenderableTexture(256, 256, GL_RGBA8, new int[]{GL_COLOR_ATTACHMENT0}, true).setParameters(GL_REPEAT, GL_TEXTURE_WRAP_S, GL_TEXTURE_WRAP_T);
 		quad.sendMaterial(new Material().sendTexture(texture));
 	}
 	
@@ -66,16 +67,19 @@ public class RenderManager {
 	}
 	
 	RenderableTexture texture;
-	Entity quad = new EntityQuad(-.5f, -.5f, .5f, -1f, -1f, 2f, 2f, 1f, 1f);
+	Entity quad = new EntityQuad(-1, -1, 1, 2, 2);
 	
 	public RenderManager draw() {
-		glClearColor(bg.x, 1, bg.z, bg.w);
+		glClearColor(bg.x, bg.y, bg.z, bg.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
+		ShaderProgram3D p = ShaderProgram3D.INSTANCE;
+		p.sendBoolean(p.UNIFORM_LIGHTS_ENABLED, true);
 		lm.update();
 		texture.bindAsRenderTarget(true);
 		em.draw();
 		texture.releaseRenderTarget();
+		p.sendBoolean(p.UNIFORM_LIGHTS_ENABLED, false);
 		Camera.INSTANCE.setIdle(true);
 		quad.draw();
 		Camera.INSTANCE.setIdle(false);

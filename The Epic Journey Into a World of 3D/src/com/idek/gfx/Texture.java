@@ -30,11 +30,24 @@ public class Texture {
 	
 	public Texture() {}
 	
+	public Texture(ShaderProgram program) {
+		this.program = program;
+	}
+	
 	public Texture(String path) {
 		this(path, true);
 	}
 	
+	public Texture(ShaderProgram program, String path) {
+		this(program, path, true);
+	}
+	
 	public Texture(String path, boolean repeat) {
+		loadTexture(path, repeat);
+	}
+	
+	public Texture(ShaderProgram program, String path, boolean repeat) {
+		this.program = program;
 		loadTexture(path, repeat);
 	}
 	

@@ -2,6 +2,8 @@ package com.idek.gfx;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import com.idek.library.TextureLibrary;
+
 public class Material {
 	
 	public static final int DEFAULT_SHINE_DAMPER = 1;

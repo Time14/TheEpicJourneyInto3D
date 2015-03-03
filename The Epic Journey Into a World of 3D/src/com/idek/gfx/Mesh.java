@@ -31,8 +31,22 @@ public class Mesh {
 	
 	public Mesh() {}
 	
+	public Mesh(ShaderProgram program) {
+		this.program = program;
+	}
+	
+	public Mesh(ShaderProgram program, Vertex3D[] vertices) {
+		this.program = program;
+		createVAO(vertices);
+	}
+	
 	public Mesh(Vertex3D[] vertices) {
 		createVAO(vertices);
+	}
+	
+	public Mesh(ShaderProgram program, Vertex3D[] vertices, int[] indices) {
+		this.program = program;
+		createVAO(vertices, indices);
 	}
 	
 	public Mesh(Vertex3D[] vertices, int[] indices) {

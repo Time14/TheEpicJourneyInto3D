@@ -2,6 +2,8 @@ package com.idek.gfx.light;
 
 import com.idek.gfx.Texture;
 import com.idek.gfx.shader.ShaderProgram3D;
+import com.idek.gfx.shader.StructDefiner;
+import com.idek.gfx.shader.StructDefiner.GLSLType;
 
 /*
  * 
@@ -18,10 +20,12 @@ import com.idek.gfx.shader.ShaderProgram3D;
  * 
 */
 
-public abstract class Light {
+public abstract class Light implements StructDefiner {
+	
+	public static final String[] STRUCT_COMPONENTS = new String[]{"isDirectional", "fallOff", "position", "color"};
+	public static final int NUM_COMPONENTS = STRUCT_COMPONENTS.length;
 	
 	public static final int SIZE = 8;
-	public static final int NUM_COMPONENTS = 4;
 	
 	protected ShaderProgram3D shader = ShaderProgram3D.INSTANCE;
 	
@@ -46,6 +50,18 @@ public abstract class Light {
 	
 	public abstract int getSize();
 	public abstract void createShadowMap();
+
+	public GLSLType[] getStructure() {
+		return new GLSLType[]{GLSLType.INT, GLSLType.FLOAT, GLSLType.VEC3, GLSLType.VEC3};
+	}
+	
+	public String[] getComponentNames() {
+		return STRUCT_COMPONENTS;
+	}
+	
+	public StructDefiner getCoreInstance() {
+		return new DirectionalLight();
+	}
 	
 	public void cleanUp() {
 		if(shadowMap != null)

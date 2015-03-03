@@ -1,5 +1,6 @@
-package com.idek.gfx;
+package com.idek.library;
 
+import com.idek.gfx.Mesh;
 import com.idek.util.Loader;
 
 public final class MeshLibrary {

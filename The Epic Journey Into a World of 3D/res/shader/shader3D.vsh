@@ -6,6 +6,8 @@ uniform mat4 projectionMatrix;
 uniform mat4 transformMatrix;
 uniform mat4 viewMatrix;
 
+uniform bool enableLights = true;
+
 struct Light {
 	bool isDirectional;
 	float fallOff;
@@ -28,15 +30,17 @@ void main() {
 	//vec3 lightPos = inverse(viewMatrix * vec4(0, 0, 0, 1)).xyz;
 
 	vec4 worldPosition = viewMatrix * transformMatrix * vec4(in_position, 1);
-
 	pass_texCoord = in_texCoord;
-	pass_normal  = (viewMatrix * transformMatrix * vec4(in_normal, 0)).xyz;
 
-	for(int i = 0; i < numLights; i++) {
-		if(lights[i].isDirectional){
-			pass_toLight[i] = (viewMatrix * vec4(-lights[i].position, 0)).xyz;
-		} else {
-			pass_toLight[i] = (viewMatrix * vec4(lights[i].position, 1)).xyz - worldPosition.xyz;
+	if(enableLights) {
+		pass_normal  = (viewMatrix * transformMatrix * vec4(in_normal, 0)).xyz;
+
+		for(int i = 0; i < numLights; i++) {
+			if(lights[i].isDirectional){
+				pass_toLight[i] = (viewMatrix * vec4(-lights[i].position, 0)).xyz;
+			} else {
+				pass_toLight[i] = (viewMatrix * vec4(lights[i].position, 1)).xyz - worldPosition.xyz;
+			}
 		}
 	}
 

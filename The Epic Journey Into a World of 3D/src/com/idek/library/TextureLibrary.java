@@ -1,4 +1,6 @@
-package com.idek.gfx;
+package com.idek.library;
+
+import com.idek.gfx.Texture;
 
 public final class TextureLibrary {
 	

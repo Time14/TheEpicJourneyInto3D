@@ -7,6 +7,8 @@ uniform mat4 projectionMatrix;
 uniform mat4 transformMatrix;
 uniform mat4 viewMatrix;
 
+uniform bool enableLights = true;
+
 uniform sampler2D[] textures;
 
 struct Light {
@@ -26,20 +28,24 @@ in vec3 pass_toLight[MAX_NUM_LIGHTS];
 layout(location = 0) out vec4 out_color;
 void main() {
 
-	vec3 diffuse = vec3(0, 0, 0);
+	if(enableLights) {
 
-	vec3 finalNormal = normalize(pass_normal + (viewMatrix * texture2D(textures[1], pass_texCoord)).xyz);
+		vec3 diffuse = vec3(0, 0, 0);
 
-	for(int i = 0; i < numLights; i++) {
-		if(lights[i].isDirectional) {
-			diffuse += max(dot(normalize(pass_toLight[i]), finalNormal), 0) * lights[i].color;
-		} else {
-			diffuse += max(dot(normalize(pass_toLight[i]), finalNormal), 0) * lights[i].color * min(lights[i].fallOff/pow(length(pass_toLight[i]), 2), 1);
+		vec3 finalNormal = normalize(pass_normal + (viewMatrix * texture2D(textures[1], pass_texCoord)).xyz);
+
+		for(int i = 0; i < numLights; i++) {
+			if(lights[i].isDirectional) {
+				diffuse += max(dot(normalize(pass_toLight[i]), finalNormal), 0) * lights[i].color;
+			} else {
+				diffuse += max(dot(normalize(pass_toLight[i]), finalNormal), 0) * lights[i].color * min(lights[i].fallOff/pow(length(pass_toLight[i]), 2), 1);
+			}
+
 		}
-
+		out_color = vec4(diffuse, 1) * texture2D(textures[0], pass_texCoord);
+	} else {
+		out_color = texture2D(textures[0], pass_texCoord);
 	}
-
-	out_color = texture2D(textures[0], pass_texCoord);
 }
 
 /*

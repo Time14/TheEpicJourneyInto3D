@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.idek.gfx.Texture;
+import com.idek.gfx.shader.ShaderProgram;
 import com.idek.gfx.shader.ShaderProgram3D;
 
 public class LightManager {
 	
-	private ShaderProgram3D program = ShaderProgram3D.INSTANCE;
+	private ShaderProgram program = ShaderProgram3D.INSTANCE;
 	
 	private ArrayList<Light> lights;
 	
@@ -30,8 +31,8 @@ public class LightManager {
 	public LightManager update() {
 		program.bind();
 		Light[] data = new Light[]{};
-		program.sendLights(lights.toArray(data));
-		
+		program.sendStructArray(ShaderProgram3D.UNIFORM_LIGHTS, lights.toArray(data));
+		program.sendInt(ShaderProgram3D.UNIFORM_NUM_LIGHTS, lights.size());
 		
 		
 		return this;

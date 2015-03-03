@@ -3,16 +3,17 @@ package com.idek.gfx.entity;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.idek.gfx.MeshLibrary;
 import com.idek.gfx.RenderManager;
 import com.idek.gfx.RenderableTexture;
 import com.idek.gfx.Transform;
+import com.idek.gfx.shader.ShaderProgram;
 import com.idek.gfx.shader.ShaderProgram3D;
+import com.idek.library.MeshLibrary;
 import com.idek.util.Loader;
 
 public class EntityManager {
 	
-	private ShaderProgram3D program = ShaderProgram3D.INSTANCE;
+	private ShaderProgram program = ShaderProgram3D.INSTANCE;
 	
 	private HashMap<String, Entity> entities;
 	private HashMap<String, Group> groups;
