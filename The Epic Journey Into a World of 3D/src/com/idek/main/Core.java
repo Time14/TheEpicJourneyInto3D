@@ -6,8 +6,8 @@ import static org.lwjgl.opengl.GL11.glGetString;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
-import com.idek.gfx.Camera;
 import com.idek.gfx.RenderManager;
+import com.idek.gfx.camera.Camera;
 import com.idek.input.InputManager;
 import com.idek.time.Time;
 
@@ -33,8 +33,9 @@ public class Core {
 				
 		initDisplay();
 		
-		im = new InputManager(this);
-		rm = new RenderManager(this).setBGColor(0, 0, 0);
+		rm = new RenderManager(this);
+		
+		im = new InputManager(rm, this);
 		
 		while(!Display.isCloseRequested() && running) {
 			gameLoop();

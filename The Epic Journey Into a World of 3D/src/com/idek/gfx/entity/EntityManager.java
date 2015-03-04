@@ -13,14 +13,15 @@ import com.idek.util.Loader;
 
 public class EntityManager {
 	
-	private ShaderProgram program = ShaderProgram3D.INSTANCE;
+	private RenderManager rm;
 	
 	private HashMap<String, Entity> entities;
 	private HashMap<String, Group> groups;
 	
-	public EntityManager() {
+	public EntityManager(RenderManager rm) {
 		entities = new HashMap<>();
 		groups = new HashMap<>();
+		this.rm = rm;
 	}
 	
 	public EntityManager createEntities() {
@@ -29,7 +30,7 @@ public class EntityManager {
 		
 		for(int i = 0; i < 10; i++) {
 			for(int j = 0; j < 10; j++) {
-				addToGroup("Funky Toruses", new Entity(MeshLibrary.FUNKY_TORUS, new Transform(i*2, j*2, 0)));
+				addToGroup("Funky Toruses", new Entity(rm, MeshLibrary.FUNKY_TORUS, new Transform(i*2, j*2, 0)));
 			}
 		}
 		

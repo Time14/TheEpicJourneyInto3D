@@ -27,8 +27,6 @@ public abstract class Light implements StructDefiner {
 	
 	public static final int SIZE = 8;
 	
-	protected ShaderProgram3D shader = ShaderProgram3D.INSTANCE;
-	
 	protected boolean updated = false;
 	
 	protected Texture shadowMap;

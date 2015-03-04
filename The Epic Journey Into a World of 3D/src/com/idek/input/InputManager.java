@@ -5,7 +5,8 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
-import com.idek.gfx.Camera;
+import com.idek.gfx.RenderManager;
+import com.idek.gfx.camera.Camera;
 import com.idek.gfx.entity.Entity;
 import com.idek.main.Core;
 
@@ -19,10 +20,11 @@ public class InputManager {
 	
 	private Core core;
 	
-	private Camera camera = Camera.INSTANCE;
+	private RenderManager rm;
 	
-	public InputManager(Core core) {
+	public InputManager(RenderManager rm, Core core) {
 		this.core = core;
+		this.rm = rm;
 	}
 	
 	public void update() {
@@ -31,15 +33,17 @@ public class InputManager {
 	}
 	
 	private void checkMouse() {
-				
-		camera.rotate(-Mouse.getDY() * Camera.SENSITIVITY, Mouse.getDX() * Camera.SENSITIVITY, 0);
-		float rx = camera.getTransform().rotation.x;
+		
+		Camera c = rm.getCurrentCamera();
+		
+		c.rotate(-Mouse.getDY() * c.getSensitivity(), Mouse.getDX() * c.getSensitivity(), 0);
+		float rx = c.getTransform().rotation.x;
 		
 		if(rx > 90 && rx < 270) {
 			if(rx < 270 - rx)
-				camera.setRX(90);
+				c.setRX(90);
 			else
-				camera.setRX(270);
+				c.setRX(270);
 		}
 		
 		while(Mouse.next()) {
@@ -62,18 +66,20 @@ public class InputManager {
 	private void checkKeyboard() {
 		float speed = 0.1f;
 		
+		Camera c = rm.getCurrentCamera();
+		
 		if(isKeyDown(KEY_W))
-			camera.moveForward(speed);
+			c.moveForward(speed);
 		if(isKeyDown(KEY_A))
-			camera.moveRight(-speed);
+			c.moveRight(-speed);
 		if(isKeyDown(KEY_S))
-			camera.moveForward(-speed);
+			c.moveForward(-speed);
 		if(isKeyDown(KEY_D))
-			camera.moveRight(speed);
+			c.moveRight(speed);
 		if(isKeyDown(KEY_LSHIFT))
-			camera.translateY(-speed);
+			c.translateY(-speed);
 		if(isKeyDown(KEY_SPACE))
-			camera.translateY(speed);
+			c.translateY(speed);
 		
 		while(Keyboard.next()) {
 			if(Keyboard.getEventKeyState()) {

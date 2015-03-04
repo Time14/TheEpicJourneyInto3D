@@ -1,6 +1,7 @@
 package com.idek.gfx;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.*;
 import static org.lwjgl.opengl.GL14.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL21.*;
@@ -16,6 +17,9 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
+import com.idek.gfx.camera.Camera;
+import com.idek.gfx.camera.CameraPerspectiveProjection;
+import com.idek.gfx.camera.CameraStereoscopic3D;
 import com.idek.gfx.entity.Entity;
 import com.idek.gfx.entity.EntityManager;
 import com.idek.gfx.entity.EntityQuad;
@@ -40,20 +44,24 @@ public class RenderManager {
 	private EntityManager em;
 	private LightManager lm;
 	
+	private HashMap<String, Camera> cameras;
+	private Camera currentCamera;
+	
 	public RenderManager(Core core) {
 		this.core = core;
 		
-		em = new EntityManager();
-		lm = new LightManager();
+		cameras = new HashMap<>();
+		
+		em = new EntityManager(this);
+		lm = new LightManager(this);
 		
 		initGL();
 		
 		em.createEntities();
 		lm.createLights();
 		
-//		texture = (RenderableTexture)new RenderableTexture(256, 256, GL_DEPTH_COMPONENT24, new int[]{GL_DEPTH_ATTACHMENT}, false).setParameters(GL_REPEAT, GL_TEXTURE_WRAP_S, GL_TEXTURE_WRAP_T);
-		texture = (RenderableTexture)new RenderableTexture(256, 256, GL_RGBA8, new int[]{GL_COLOR_ATTACHMENT0}, true).setParameters(GL_REPEAT, GL_TEXTURE_WRAP_S, GL_TEXTURE_WRAP_T);
-		quad.sendMaterial(new Material().sendTexture(texture));
+		registerCameras(new CameraStereoscopic3D(this).setBGColor(1, 0, 1, 1));
+		useCamera("default");
 	}
 	
 	
@@ -66,25 +74,46 @@ public class RenderManager {
 		return this;
 	}
 	
-	RenderableTexture texture;
-	Entity quad = new EntityQuad(-1, -1, 1, 2, 2);
-	
 	public RenderManager draw() {
-		glClearColor(bg.x, bg.y, bg.z, bg.w);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		ShaderProgram3D p = ShaderProgram3D.INSTANCE;
-		p.sendBoolean(p.UNIFORM_LIGHTS_ENABLED, true);
-		lm.update();
-		texture.bindAsRenderTarget(true);
-		em.draw();
-		texture.releaseRenderTarget();
-		p.sendBoolean(p.UNIFORM_LIGHTS_ENABLED, false);
-		Camera.INSTANCE.setIdle(true);
-		quad.draw();
-		Camera.INSTANCE.setIdle(false);
+		currentCamera.drawScene();
 		
 		return this;
+	}
+	
+	public void registerCameras(Camera defaultCamera) {
+		registerCamera("default", defaultCamera);
+		
+	}
+	
+	public RenderManager registerCamera(String name, Camera camera) {
+		cameras.put(name, camera);
+		return this;
+	}
+	
+	public RenderManager useCamera(String name) {
+		currentCamera = cameras.get(name);
+		return this;
+	}
+	
+	public Camera getCamera(String name) {
+		return cameras.get(name);
+	}
+	
+	public Camera getCurrentCamera() {
+		return currentCamera;
+	}
+	
+	public ShaderProgram getShaderProgram() {
+		return currentCamera.getShaderProgram();
+	}
+	
+	public EntityManager getEntityManager() {
+		return em;
+	}
+	
+	public LightManager getLightManager() {
+		return lm;
 	}
 	
 	private RenderManager initGL() {
@@ -107,21 +136,6 @@ public class RenderManager {
 			e.printStackTrace();
 		}
 		
-		return this;
-	}
-	
-	public RenderManager setBGColor(float r, float g, float b) {
-		return setBGColor(r, g, b, 1);
-	}
-	
-	public RenderManager setBGColor(float r, float g, float b, float a) {
-		return setBGColor(new Vector4f(r, g, b, a));
-	}
-	
-	public RenderManager setBGColor(Vector4f color) {
-		bg = color;
-
-		glClearColor(bg.x, bg.y, bg.z, bg.w);
 		return this;
 	}
 	
@@ -153,7 +167,8 @@ public class RenderManager {
 		em.cleanUp();
 		lm.cleanUp();
 		
-		ShaderProgram3D.INSTANCE.cleanUp();
+		for(Camera c : cameras.values())
+			c.cleanUp();
 		
 		return this;
 	}

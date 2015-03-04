@@ -1,32 +1,52 @@
-package com.idek.gfx;
+package com.idek.gfx.camera;
+
+import static org.lwjgl.opengl.GL11.glClearColor;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
-public class Camera {
+import com.idek.gfx.RenderManager;
+import com.idek.gfx.Transform;
+import com.idek.gfx.entity.EntityManager;
+import com.idek.gfx.light.LightManager;
+import com.idek.gfx.shader.ShaderProgram;
+
+public abstract class Camera {
 	
-	public static final float SENSITIVITY = .5f;
-	public static final float DEFAULT_FOV = 90;
-	public static final float DEFAULT_ZNEAR = 0.0001f;
-	public static final float DEFAULT_ZFAR = 100;
+	public static final float DEFAULT_SENSITIVITY = .5f;
 	
-	private static float fov = DEFAULT_FOV;
-	private static float zNear = DEFAULT_ZNEAR;
-	private static float zFar = DEFAULT_ZFAR;
+	public static final ShaderProgram DEFAULT_SHADER_PROGRAM = CameraPerspectiveProjection.SHADER_PROGRAM;
+	public static final Vector4f DEFAULT_BACKGROUND_COLOR = new Vector4f(0, 0, 0, 1);
 	
+	protected float sensitivity = DEFAULT_SENSITIVITY;
 	
-	private Transform transform;
+	protected Transform transform;
 	
-	private boolean isUpdated;
+	protected boolean isUpdated;
 	
-	private boolean idle;
+	protected boolean idle;
 	
-	public Camera() {
+	protected ShaderProgram program = DEFAULT_SHADER_PROGRAM;
+	
+	protected Vector4f bgc = DEFAULT_BACKGROUND_COLOR;
+	
+	protected RenderManager rm;
+	protected EntityManager em;
+	protected LightManager lm;
+	
+	public Camera(RenderManager rm) {
 		isUpdated = false;
 		idle = false;
 		transform = new Transform();
+		
+		this.rm = rm;
+		em = rm.getEntityManager();
+		lm = rm.getLightManager();
 	}
+	
+	public abstract Camera drawScene();
 	
 	public Transform getTransform() {
 		return transform;
@@ -172,6 +192,14 @@ public class Camera {
 		return this;
 	}
 	
+	public ShaderProgram getShaderProgram() {
+		return program;
+	}
+	
+	public float getSensitivity() {
+		return sensitivity;
+	}
+	
 	public boolean isUpdated() {
 		return isUpdated;
 	}
@@ -182,31 +210,28 @@ public class Camera {
 	}
 	
 	public Matrix4f getViewMatrix() {
+		isUpdated = true;
 		if(idle)
 			return (Matrix4f)new Matrix4f().setIdentity();
 		else
 			return (Matrix4f)transform.getMatrix().invert();
 	}
 	
-	public static final Matrix4f getProjectionMatrix() {
-		Matrix4f matrix = new Matrix4f();
-		
-		float tanHalfFOV = (float)Math.tan(Math.toRadians(fov/2));
-		float zRange = zNear - zFar;
-		float ar = ((float)Display.getWidth()) / Display.getHeight();
-		
-		matrix.m00 = 1f/(tanHalfFOV*ar); matrix.m10 = 0;			 matrix.m20 = 0;					matrix.m30 = 0;
-		matrix.m01 = 0;					 matrix.m11 = 1f/tanHalfFOV; matrix.m21 = 0;					matrix.m31 = 0;
-		matrix.m02 = 0;					 matrix.m12 = 0;			 matrix.m22 = (-zNear-zFar)/zRange;	matrix.m32 = (2*zNear*zFar)/zRange;
-		matrix.m03 = 0;					 matrix.m13 = 0;			 matrix.m23 = 1;					matrix.m33 = 0;
-		
-		return matrix;
+	public Camera setBGColor(float r, float g, float b) {
+		return setBGColor(r, g, b, 1);
 	}
 	
-	public static final void setPerspectiveProjection(float fov, float zNear, float zFar) {
-		Camera.fov = fov;
-		Camera.zNear = zNear;
-		Camera.zFar = zFar;
+	public Camera setBGColor(float r, float g, float b, float a) {
+		return setBGColor(new Vector4f(r, g, b, a));
+	}
+	
+	public Vector4f getBackgroundColor() {
+		return bgc;
+	}
+	
+	public Camera setBGColor(Vector4f color) {
+		bgc = color;
+		return this;
 	}
 	
 	public Camera setIdle(boolean idle) {
@@ -219,5 +244,7 @@ public class Camera {
 		return idle;
 	}
 	
-	public static final Camera INSTANCE = new Camera();
+	public void cleanUp() {
+		program.cleanUp();
+	}
 }

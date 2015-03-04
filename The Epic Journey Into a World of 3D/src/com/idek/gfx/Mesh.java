@@ -9,6 +9,7 @@ import static org.lwjgl.opengl.GL31.*;
 
 import java.nio.FloatBuffer;
 
+import com.idek.gfx.camera.Camera;
 import com.idek.gfx.shader.ShaderProgram;
 import com.idek.gfx.shader.ShaderProgram3D;
 import com.idek.gfx.vertex.Vertex3D;
@@ -27,7 +28,7 @@ public class Mesh {
 	private Vertex3D[] vertices;
 	private int[] indices;
 	
-	private ShaderProgram program = ShaderProgram3D.INSTANCE;
+	private ShaderProgram program = Camera.DEFAULT_SHADER_PROGRAM;
 	
 	public Mesh() {}
 	

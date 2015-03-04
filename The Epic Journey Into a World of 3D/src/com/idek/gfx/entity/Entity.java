@@ -2,10 +2,11 @@ package com.idek.gfx.entity;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import com.idek.gfx.Camera;
 import com.idek.gfx.Material;
 import com.idek.gfx.Mesh;
+import com.idek.gfx.RenderManager;
 import com.idek.gfx.Transform;
+import com.idek.gfx.camera.Camera;
 import com.idek.gfx.shader.ShaderProgram;
 import com.idek.gfx.shader.ShaderProgram3D;
 import com.idek.gfx.vertex.Vertex3D;
@@ -19,24 +20,25 @@ public class Entity {
 	
 	private Transform transform;
 	
-	private Camera camera = Camera.INSTANCE;
+	private RenderManager rm;
 	
-	public Entity() {
+	public Entity(RenderManager rm) {
 		transform = new Transform();
 	}
 	
-	public Entity(Mesh mesh) {
-		this(mesh, new Transform());
+	public Entity(RenderManager rm, Mesh mesh) {
+		this(rm, mesh, new Transform());
 	}
 
-	public Entity(Mesh mesh, Transform transform) {
-		this(mesh, transform, new Material());
+	public Entity(RenderManager rm, Mesh mesh, Transform transform) {
+		this(rm, mesh, transform, new Material());
 	}
 	
-	public Entity(Mesh mesh, Transform transform, Material material) {
+	public Entity(RenderManager rm, Mesh mesh, Transform transform, Material material) {
 		this.mesh = mesh;
 		this.transform = transform;
 		this.material = material;
+		this.rm = rm;
 	}
 	
 	public Entity sendMesh(Mesh mesh) {
@@ -72,10 +74,10 @@ public class Entity {
 	}
 	
 	public void draw() {
-		ShaderProgram3D.INSTANCE.bind();
-		ShaderProgram3D.INSTANCE.sendMatrix(ShaderProgram3D.UNIFORM_TRANSFORM_MATRIX, transform.getMatrix());
-		if(!camera.isUpdated())
-			ShaderProgram3D.INSTANCE.sendMatrix(ShaderProgram3D.UNIFORM_VIEW_MATRIX, camera.setUpdated(true).getViewMatrix());
+		rm.getShaderProgram().bind();
+		rm.getShaderProgram().sendMatrix(ShaderProgram3D.UNIFORM_TRANSFORM_MATRIX, transform.getMatrix());
+		if(!rm.getCurrentCamera().isUpdated())
+			rm.getShaderProgram().sendMatrix(ShaderProgram3D.UNIFORM_VIEW_MATRIX, rm.getCurrentCamera().getViewMatrix());
 		material.bind();
 		mesh.draw();
 	}
@@ -269,6 +271,10 @@ public class Entity {
 	public Entity translate(Vector3f offset) {
 		transform.translate(offset);
 		return this;
+	}
+	
+	public RenderManager getRenderManager() {
+		return rm;
 	}
 	
 	public void cleanUp() {

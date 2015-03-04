@@ -13,6 +13,7 @@ import static org.lwjgl.opengl.GL32.*;
 import java.awt.image.BufferedImage;
 import java.security.InvalidParameterException;
 
+import com.idek.gfx.camera.Camera;
 import com.idek.gfx.shader.ShaderProgram;
 import com.idek.gfx.shader.ShaderProgram3D;
 import com.idek.util.Loader;
@@ -20,7 +21,7 @@ import com.idek.util.Util;
 
 public class Texture {
 	
-	public static final ShaderProgram DEFAULT_SHADER_PROGRAM = ShaderProgram3D.INSTANCE;
+	public static final ShaderProgram DEFAULT_SHADER_PROGRAM = Camera.DEFAULT_SHADER_PROGRAM;
 	
 	protected ShaderProgram program = DEFAULT_SHADER_PROGRAM;
 	
